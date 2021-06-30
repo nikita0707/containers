@@ -5,7 +5,7 @@
 
 namespace ft
 {
-	template <class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
+	template <typename Category, typename T, typename Distance = ptrdiff_t, typename Pointer = T*, typename Reference = T&>
 	struct iterator
 	{
 		typedef T			value_type;
@@ -15,7 +15,7 @@ namespace ft
 		typedef Category	iterator_category;
 	};
 
-	template <class T>
+	template <typename T>
 	struct bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>
 	{
 		typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::value_type			value_type;
@@ -151,6 +151,20 @@ namespace ft
 	ft::random_access_iterator<T>	operator+(typename ft::random_access_iterator<T>::difference_type n,
 												const ft::random_access_iterator<T> it)
 	{ return ft::random_access_iterator<T>(it.base() + n); }
+
+
+
+	template<class InputIterator>
+	typename ft::iterator_traits<InputIterator>::difference_type	distance(InputIterator first, InputIterator last)
+	{
+		typename ft::iterator_traits<InputIterator>::difference_type	n = 0;
+		while (first != last)
+		{
+			n++;
+			first++;
+		}
+		return (n);
+	}
 }
 
 #endif

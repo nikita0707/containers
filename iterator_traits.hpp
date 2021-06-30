@@ -13,7 +13,7 @@ namespace ft
 
 	struct random_access_iterator_tag : public bidirectional_iterator_tag {};
 
-	template <class Iterator>
+	template <typename Iterator>
 	struct iterator_traits
 	{
 		public:
@@ -24,7 +24,7 @@ namespace ft
 			typedef typename Iterator::iterator_category	iterator_category;
 	};
 
-	template <class T>
+	template <typename T>
 	struct iterator_traits<T*>
 	{
 		public:
@@ -35,7 +35,7 @@ namespace ft
 			typedef ft::random_access_iterator_tag			iterator_category;
 	};
 
-	template <class T>
+	template <typename T>
 	struct iterator_traits<const T*>
 	{
 		public:
