@@ -4,6 +4,7 @@
 # include <memory>
 # include "iterator.hpp"
 # include "reverse_iterator.hpp"
+# include "utils.hpp"
 # include <sstream>
 
 namespace ft
@@ -430,10 +431,10 @@ namespace ft
 	{
 		if (lhs.size() != rhs.size())
 			return (false);
-		typename ft::vector<T, Alloc>::const_iterator	beginl = lsh.begin();
-		typename ft::vector<T, Alloc>::const_iterator	beginr = rsh.begin();
-		typename ft::vector<T, Alloc>::const_iterator	endl = lsh.end();
-		typename ft::vector<T, Alloc>::const_iterator	endr = rsh.end();
+		typename ft::vector<T, Alloc>::const_iterator	beginl = lhs.begin();
+		typename ft::vector<T, Alloc>::const_iterator	beginr = rhs.begin();
+		typename ft::vector<T, Alloc>::const_iterator	endl = lhs.end();
+		typename ft::vector<T, Alloc>::const_iterator	endr = rhs.end();
 		while (beginl != endl)
 		{
 			if (beginr == endr || *beginl != *beginr)
