@@ -63,18 +63,7 @@ namespace ft
 			vector(const vector& x)
 			: _alloc(x._alloc), start(nullptr), finish(nullptr), end_of_storage(nullptr)
 			{
-				iterator	first = x.begin();
-				iterator	last = x.end();
-				difference_type	n = ft::distance(x.begin(), x.end());
-				start = _alloc.allocate(n);
-				finish = start;
-				end_of_storage = start + n;
-				while (first != last)
-				{
-					_alloc.construct(finish, *first);
-					++first;
-					++finish;
-				}
+				insert(begin(), x.begin(), x.end());
 			}
 
 			~vector() { clear(); _alloc.deallocate(start, capacity()); }
