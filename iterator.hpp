@@ -56,13 +56,13 @@ namespace ft
 
 			pointer	operator->() { return this->ptr; }
 
-			random_access_iterator&	operator++() { this->ptr++; return *this; }
+			random_access_iterator&	operator++() { ++(this->ptr); return *this; }
 
-			random_access_iterator&	operator++(int) { random_access_iterator temp(this->ptr); this->ptr++; return temp; }
+			random_access_iterator&	operator++(int) { random_access_iterator temp(this->ptr); ++(this->ptr); return temp; }
 
-			random_access_iterator&	operator--() { this->ptr--; return *this; }
+			random_access_iterator&	operator--() { --(this->ptr); return *this; }
 
-			random_access_iterator&	operator--(int) { random_access_iterator temp(this->ptr); this->ptr--; return temp; }
+			random_access_iterator&	operator--(int) { random_access_iterator temp(this->ptr); --(this->ptr); return temp; }
 
 			random_access_iterator	operator+(difference_type n) const { return this->ptr + n; }
 
@@ -152,18 +152,45 @@ namespace ft
 												const ft::random_access_iterator<T> it)
 	{ return ft::random_access_iterator<T>(it.base() + n); }
 
-
-
 	template<class InputIterator>
 	typename ft::iterator_traits<InputIterator>::difference_type	distance(InputIterator first, InputIterator last)
 	{
 		typename ft::iterator_traits<InputIterator>::difference_type	n = 0;
 		while (first != last)
 		{
-			n++;
-			first++;
+			++n;
+			++first;
 		}
 		return (n);
+	}
+
+	template<class InputIt1, class InputIt2>
+	bool lexicographical_compare(InputIt1 first1, InputIt1 last1,
+									InputIt2 first2, InputIt2 last2)
+	{
+		for ( ; (first1 != last1) && (first2 != last2); ++first1, (void) ++first2 )
+		{
+			if (*first1 < *first2)
+				return (true);
+			if (*first2 < *first1)
+				return (false);
+		}
+		return ((first1 == last1) && (first2 != last2));
+	}
+
+	template<class InputIt1, class InputIt2, class Compare>
+	bool lexicographical_compare(InputIt1 first1, InputIt1 last1,
+								InputIt2 first2, InputIt2 last2,
+								Compare comp)
+	{
+		for ( ; (first1 != last1) && (first2 != last2); ++first1, (void) ++first2 )
+		{
+			if (comp(*first1, *first2))
+				return (true);
+			if (comp(*first2, *first1))
+				return (false);
+		}
+		return ((first1 == last1) && (first2 != last2));
 	}
 }
 
