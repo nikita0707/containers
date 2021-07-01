@@ -2,11 +2,13 @@
 #include <list>
 #include <vector>
 #include <stack>
+#include <map>
 #include <string>
 #include "iterator_traits.hpp"
 #include "iterator.hpp"
 #include "vector.hpp"
 #include "stack.hpp"
+#include "map.hpp"
 #include <time.h>
 
 class qwe
@@ -50,9 +52,11 @@ void test()
 	// }
 	// std::cout << "\n";
 
-	ft::stack<int>	stack1;
-	ft::stack<int>	stack2;
-	std::cout << (stack1 < stack2);
+	// ft::stack<int>	stack1;
+	// ft::stack<int>	stack2;
+	// std::cout << (stack1 < stack2);
+
+	// std::map<char, int>	map;
 }
 
 int main()
