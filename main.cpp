@@ -22,7 +22,7 @@ class qwe
 
 void test()
 {
-	// int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
+	int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
 
 	// std::cout << std::is_integral<bool>::value << "\n";
 	// std::cout << ft::is_integral<bool>::value << "\n";
@@ -65,7 +65,6 @@ void test()
 	test_stack();
 	std::cout << "\n";
 	// test_map();
-	// std::set<int>		set;
 
 	// std::map<int, int>	map;
 	// std::map<int, int>	map2;
@@ -73,7 +72,34 @@ void test()
 	// auto it = map.begin();
 	// std::cout << (it1 != it1);
 	ft::map<int, int>	mymap;
-	mymap.begin();
+	ft::pair<int, int>	p = ft::make_pair(1, 1);
+	mymap.insert(p);
+	p = ft::make_pair(2, 2);
+	mymap.insert(p);
+	p = ft::make_pair(3, 3);
+	mymap.insert(p);
+	p = ft::make_pair(4, 4);
+	mymap.insert(p);
+	p = ft::make_pair(5, 5);
+	mymap.insert(p);
+	// mymap[1] = 1;
+	// mymap[2] = 2;
+	// mymap[3] = 3;
+	// mymap[4] = 4;
+	// mymap[5] = 5;
+	auto beg = mymap.begin();
+	auto end = mymap.end();
+	while (beg != end)
+	{
+		std::cout << (*beg).second << "\n";
+		++beg;
+	}
+	// auto end = mymap.end();
+	// while (beg != end)
+	// {
+	// 	std::cout << (*beg).first << "\n";
+	// 	beg++;
+	// }
 }
 
 int main()

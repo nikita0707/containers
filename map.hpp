@@ -32,7 +32,7 @@ namespace ft
 			typedef typename allocator_type::pointer							pointer;
 			typedef typename allocator_type::const_pointer						const_pointer;
 		private:
-			typedef RBTree<key_type, value_type, key_compare, allocator_type>	tree_type;
+			typedef RBTree<key_type, value_type, Select1st<value_type>, key_compare, allocator_type>	tree_type;
 		public:
 			typedef typename tree_type::iterator								iterator;
 			typedef typename tree_type::const_iterator							const_iterator;
@@ -42,17 +42,39 @@ namespace ft
 			typedef size_t														size_type;
 
 			explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
-			: _comp(comp), _alloc(alloc), tree() {}
+			: _comp(comp), _alloc(alloc), tree(comp, alloc) {}
 
 			template <class InputIterator,
 						typename = typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type>
 			map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
 				const allocator_type& alloc = allocator_type())
-			: _comp(comp), _alloc(alloc), tree() {}
+			: _comp(comp), _alloc(alloc), tree(comp, alloc) {}
 
-			map(const map& x) : _comp(x._comp), _alloc(x._alloc), tree() {}
+			map(const map& x) : _comp(x._comp), _alloc(x._alloc), tree(x.comp, x.alloc) {}
 
-			iterator	begin() { return tree; }
+			iterator				begin() { return tree.begin(); }
+			const_iterator			begin() const { return tree.begin(); }
+			iterator				end() { return tree.end(); }
+			const_iterator			end() const { return tree.end(); }
+			reverse_iterator		rbegin() { return tree.rbegin(); }
+			const_reverse_iterator	rbegin() const { return tree.rbegin(); }
+			reverse_iterator		rend() { return tree.rend(); }
+			const_reverse_iterator	rend() const { return tree.rend(); }
+
+			bool					empty() const { return tree.empty(); }
+			size_type				size() const { return tree.size(); }
+			size_type				max_size() const { return tree.max_size(); }
+
+			mapped_type&			operator[](const key_type& k) {}
+
+			pair<iterator, bool>	insert(const value_type& val) { return tree.insert_unique(val); }
+
+			iterator				insert(iterator position, const value_type& val) {}
+
+			template <class InputIterator,
+						typename = typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type>
+			void					insert(InputIterator first, InputIterator last) {}
+
 		private:
 			key_compare															_comp;
 			allocator_type														_alloc;

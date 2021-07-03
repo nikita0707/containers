@@ -225,7 +225,7 @@ namespace ft
 			typedef typename ft::bidirectional_iterator<T>::pointer				pointer;
 			typedef typename ft::bidirectional_iterator<T>::reference			reference;
 			typedef RBTree_iterator<T>											_Self;
-			typedef RBNode<T>													_Base_ptr;
+			typedef RBNode<T>*													_Base_ptr;
 			typedef RBNode<T>*													_Link_type;
 			RBTree_iterator() : _M_node() {}
 			explicit RBTree_iterator(_Base_ptr x) : _M_node(x) {}
@@ -237,19 +237,19 @@ namespace ft
 					_M_node = other._M_node;
 				return (*this);
 			}
-			reference	operator*() const { return *static_cast<_Link_type>(_M_node)->value; }
-			pointer		operator->() const { return static_cast<_Link_type>(_M_node)->value; }
+			reference	operator*() const { return _M_node->value; }
+			pointer		operator->() const { return &(_M_node->value); }
 			_Self&		operator++() { _M_node = RBTreeIncrement(); return *this; }
 			_Self		operator++(int) { _Self tmp = *this; _M_node = RBTreeIncrement(); return tmp; }
 			_Self&		operator--() { _M_node = RBTreeDecrement(); return *this; }
 			_Self		operator--(int) { _Self tmp = *this; _M_node = RBTreeDecrement(); return tmp; }
 			friend bool	operator==(const _Self&x, const _Self&y) { return x._M_node == y._M_node; }
 			friend bool	operator!=(const _Self&x, const _Self&y) { return x._M_node != y._M_node; }
-			pointer		_M_node;
+			_Base_ptr	_M_node;
 		private:
-			pointer		RBTreeIncrement()
+			_Base_ptr	RBTreeIncrement()
 			{
-				pointer	x = _M_node;
+				_Base_ptr	x = _M_node;
 				if (x->right != 0)
 				{
 					x = x->right;
@@ -258,7 +258,7 @@ namespace ft
 				}
 				else
 				{
-					pointer	y = x->parent;
+					_Base_ptr	y = x->parent;
 					while (x == y->right)
 					{
 						x = y;
@@ -269,21 +269,21 @@ namespace ft
 				}
 				return x;
 			}
-			pointer		RBTreeDecrement()
+			_Base_ptr	RBTreeDecrement()
 			{
-				pointer	x = _M_node;
+				_Base_ptr	x = _M_node;
 				if (x->color == red && x->parent->parent == x)
 					x = x->right;
 				else if (x->left != 0)
 				{
-					pointer	y = x->left;
+					_Base_ptr	y = x->left;
 					while (y->right != 0)
 						y = y->right;
 					x = y;
 				}
 				else
 				{
-					pointer	y = x->parent;
+					_Base_ptr	y = x->parent;
 					while (x == y->left)
 					{
 						x = y;
@@ -319,8 +319,8 @@ namespace ft
 				return (*this);
 			}
 			iterator	_M_const_cast() const { return iterator(const_cast<_Base_ptr>(_M_node)); }
-			reference	operator*() const { return *static_cast<_Link_type>(_M_node)->value; }
-			pointer		operator->() const { return static_cast<_Link_type>(_M_node)->value; }
+			reference	operator*() const { return _M_node->value; }
+			pointer		operator->() const { return &(_M_node->value); }
 			_Self&		operator++() { _M_node = RBTreeIncrement(); return *this; }
 			_Self		operator++(int) { _Self tmp = *this; _M_node = RBTreeIncrement(); return tmp; }
 			_Self&		operator--() { _M_node = RBTreeDecrement(); return *this; }
