@@ -2,6 +2,8 @@
 # define ITERATOR_HPP
 
 # include <stddef.h>
+# include "iterator_traits.hpp"
+# include "RBNode.hpp"
 
 namespace ft
 {
@@ -41,38 +43,41 @@ namespace ft
 
 			random_access_iterator(pointer ptr) : ptr(ptr) {}
 
+			template <typename Iter>
+			random_access_iterator(const random_access_iterator<Iter>& i) : ptr(i.base()) {}
+
 			random_access_iterator&	operator=(const random_access_iterator& other)
 			{
 				if (this != &other)
-					this->ptr = other.ptr;
+					ptr = other.ptr;
 				return (*this);
 			}
 
 			virtual ~random_access_iterator() {}
 
-			pointer	base() const { return this->ptr; }
+			pointer					base() const { return ptr; }
 
-			reference	operator*() const { return *(this->ptr); }
+			reference				operator*() const { return *(ptr); }
 
-			pointer	operator->() { return this->ptr; }
+			pointer					operator->() { return ptr; }
 
-			random_access_iterator&	operator++() { ++(this->ptr); return *this; }
+			random_access_iterator&	operator++() { ++(ptr); return *this; }
 
-			random_access_iterator&	operator++(int) { random_access_iterator temp(this->ptr); ++(this->ptr); return temp; }
+			random_access_iterator	operator++(int) { random_access_iterator temp(ptr); ++(ptr); return temp; }
 
-			random_access_iterator&	operator--() { --(this->ptr); return *this; }
+			random_access_iterator&	operator--() { --(ptr); return *this; }
 
-			random_access_iterator&	operator--(int) { random_access_iterator temp(this->ptr); --(this->ptr); return temp; }
+			random_access_iterator	operator--(int) { random_access_iterator temp(ptr); --(ptr); return temp; }
 
-			random_access_iterator	operator+(difference_type n) const { return this->ptr + n; }
+			random_access_iterator	operator+(difference_type n) const { return ptr + n; }
 
-			random_access_iterator	operator-(difference_type n) const { return this->ptr - n; }
+			random_access_iterator	operator-(difference_type n) const { return ptr - n; }
 
-			random_access_iterator&	operator+=(difference_type n) { this->ptr += n; return *this; }
+			random_access_iterator&	operator+=(difference_type n) { ptr += n; return *this; }
 
-			random_access_iterator&	operator-=(difference_type n) { this->ptr -= n; return *this; }
+			random_access_iterator&	operator-=(difference_type n) { ptr -= n; return *this; }
 
-			reference				operator[](difference_type n) { return *(this->ptr + n); }
+			reference				operator[](difference_type n) { return *(ptr + n); }
 		private:
 			pointer	ptr;
 	};
@@ -209,6 +214,168 @@ namespace ft
 				return false;
 		return true;
 	}
+
+	template <typename T>
+	class RBTree_iterator : public ft::bidirectional_iterator<T>
+	{
+		public:
+			typedef T													value_type;
+			typedef typename ft::bidirectional_iterator<T>::iterator_category	iterator_category;
+			typedef typename ft::bidirectional_iterator<T>::difference_type		difference_type;
+			typedef typename ft::bidirectional_iterator<T>::pointer				pointer;
+			typedef typename ft::bidirectional_iterator<T>::reference			reference;
+			typedef RBTree_iterator<T>											_Self;
+			typedef RBNode<T>													_Base_ptr;
+			typedef RBNode<T>*													_Link_type;
+			RBTree_iterator() : _M_node() {}
+			explicit RBTree_iterator(_Base_ptr x) : _M_node(x) {}
+			RBTree_iterator(const RBTree_iterator& copy) : _M_node(copy._M_node) {}
+			~RBTree_iterator() {}
+			RBTree_iterator	&operator=(const RBTree_iterator& other)
+			{
+				if (this != &other)
+					_M_node = other._M_node;
+				return (*this);
+			}
+			reference	operator*() const { return *static_cast<_Link_type>(_M_node)->value; }
+			pointer		operator->() const { return static_cast<_Link_type>(_M_node)->value; }
+			_Self&		operator++() { _M_node = RBTreeIncrement(); return *this; }
+			_Self		operator++(int) { _Self tmp = *this; _M_node = RBTreeIncrement(); return tmp; }
+			_Self&		operator--() { _M_node = RBTreeDecrement(); return *this; }
+			_Self		operator--(int) { _Self tmp = *this; _M_node = RBTreeDecrement(); return tmp; }
+			friend bool	operator==(const _Self&x, const _Self&y) { return x._M_node == y._M_node; }
+			friend bool	operator!=(const _Self&x, const _Self&y) { return x._M_node != y._M_node; }
+			pointer		_M_node;
+		private:
+			pointer		RBTreeIncrement()
+			{
+				pointer	x = _M_node;
+				if (x->right != 0)
+				{
+					x = x->right;
+					while (x->left != 0)
+					x = x->left;
+				}
+				else
+				{
+					pointer	y = x->parent;
+					while (x == y->right)
+					{
+						x = y;
+						y = y->parent;
+					}
+					if (x->right != y)
+						x = y;
+				}
+				return x;
+			}
+			pointer		RBTreeDecrement()
+			{
+				pointer	x = _M_node;
+				if (x->color == red && x->parent->parent == x)
+					x = x->right;
+				else if (x->left != 0)
+				{
+					pointer	y = x->left;
+					while (y->right != 0)
+						y = y->right;
+					x = y;
+				}
+				else
+				{
+					pointer	y = x->parent;
+					while (x == y->left)
+					{
+						x = y;
+						y = y->parent;
+					}
+					x = y;
+				}
+				return x;
+			}
+	};
+
+	template <typename T>
+	class RBTree_const_iterator : public ft::bidirectional_iterator<const T>
+	{
+		public:
+			typedef T															value_type;
+			typedef typename ft::bidirectional_iterator<T>::iterator_category	iterator_category;
+			typedef typename ft::bidirectional_iterator<T>::difference_type		difference_type;
+			typedef typename ft::bidirectional_iterator<const T>::pointer		pointer;
+			typedef typename ft::bidirectional_iterator<const T>::reference		reference;
+			typedef RBTree_const_iterator<T>											_Self;
+			typedef RBNode<T>													_Base_ptr;
+			typedef const RBNode<T>*											_Link_type;
+			typedef RBTree_iterator<T>											iterator;
+			RBTree_const_iterator() : _M_node() {}
+			explicit RBTree_const_iterator(_Base_ptr x) : _M_node(x) {}
+			RBTree_const_iterator(const RBTree_const_iterator& copy) : _M_node(copy._M_node) {}
+			~RBTree_const_iterator() {}
+			RBTree_const_iterator	&operator=(const RBTree_const_iterator& other)
+			{
+				if (this != &other)
+					_M_node = other._M_node;
+				return (*this);
+			}
+			iterator	_M_const_cast() const { return iterator(const_cast<_Base_ptr>(_M_node)); }
+			reference	operator*() const { return *static_cast<_Link_type>(_M_node)->value; }
+			pointer		operator->() const { return static_cast<_Link_type>(_M_node)->value; }
+			_Self&		operator++() { _M_node = RBTreeIncrement(); return *this; }
+			_Self		operator++(int) { _Self tmp = *this; _M_node = RBTreeIncrement(); return tmp; }
+			_Self&		operator--() { _M_node = RBTreeDecrement(); return *this; }
+			_Self		operator--(int) { _Self tmp = *this; _M_node = RBTreeDecrement(); return tmp; }
+			friend bool	operator==(const _Self&x, const _Self&y) { return x._M_node == y._M_node; }
+			friend bool	operator!=(const _Self&x, const _Self&y) { return x._M_node != y._M_node; }
+			pointer		_M_node;
+		private:
+			pointer		RBTreeIncrement()
+			{
+				pointer	x = _M_node;
+				if (x->right != 0)
+				{
+					x = x->right;
+					while (x->left != 0)
+					x = x->left;
+				}
+				else
+				{
+					pointer	y = x->parent;
+					while (x == y->right)
+					{
+						x = y;
+						y = y->parent;
+					}
+					if (x->right != y)
+						x = y;
+				}
+				return x;
+			}
+			pointer		RBTreeDecrement()
+			{
+				pointer	x = _M_node;
+				if (x->color == red && x->parent->parent == x)
+					x = x->right;
+				else if (x->left != 0)
+				{
+					pointer	y = x->left;
+					while (y->right != 0)
+						y = y->right;
+					x = y;
+				}
+				else
+				{
+					pointer	y = x->parent;
+					while (x == y->left)
+					{
+						x = y;
+						y = y->parent;
+					}
+					x = y;
+				}
+				return x;
+			}
+	};
 }
 
 #endif

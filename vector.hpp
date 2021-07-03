@@ -43,7 +43,8 @@ namespace ft
 				}
 			}
 
-			template <class InputIterator>
+			template <class InputIterator,
+						typename = typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type>
          	vector(InputIterator first, InputIterator last,
 			 		const allocator_type& alloc = allocator_type())
 			: _alloc(alloc), start(nullptr), finish(nullptr), end_of_storage(nullptr)
@@ -162,7 +163,8 @@ namespace ft
 
 			//						Modifiers
 
-			template <class InputIterator>
+			template <class InputIterator,
+						typename = typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type>
 			void					assign(InputIterator first, InputIterator last)
 			{
 				size_type	n = ft::distance(first, last);
@@ -298,7 +300,8 @@ namespace ft
 					_alloc.deallocate(old_start, old_capacity);
 				}
 			}
-			template <class InputIterator>
+			template <class InputIterator,
+						typename = typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type>
     		void					insert(iterator position, InputIterator first, InputIterator last)
 			{
 				size_type	n = ft::distance(first, last);

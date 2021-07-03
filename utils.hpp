@@ -1,6 +1,10 @@
 #ifndef UTILS_HPP
 # define UTILS_HPP
 
+# include "reverse_iterator.hpp"
+# include "iterator.hpp"
+# include "RBNode.hpp"
+
 namespace ft
 {
 	template <bool B, class T = void>
@@ -139,6 +143,51 @@ namespace ft
 		typedef Arg1	first_argument_type;
 		typedef Arg2	second_argument_type;
 		typedef Result	result_type;
+	};
+
+	template <typename Key, typename Value, typename Alloc = std::allocator<ft::pair<Key, Value> > >
+	ft::pair<Key, Value>	mapFiller(Key key, Value value)
+	{
+		Alloc					alloc;
+		ft::pair<Key, Value>	pair = alloc.allocate(1);
+		pair->first = key;
+		pair->second = value;
+		return (pair);
+	}
+
+	template <typename Key, typename Val, typename Compare = std::less<Val>, typename Alloc = std::allocator<Val> >
+	class RBTree
+	{
+		public:
+			typedef Key														key_type;
+			typedef Val														value_type;
+			typedef value_type*												pointer;
+			typedef const value_type*										const_pointer;
+			typedef value_type&												reference;
+			typedef const value_type&										const_reference;
+			typedef size_t													size_type;
+			typedef ptrdiff_t												difference_type;
+			typedef Alloc													allocator_type;
+			typedef ft::RBTree_iterator<value_type>							iterator;
+			typedef ft::RBTree_const_iterator<value_type>					const_iterator;
+			typedef ft::reverse_iterator<iterator>							reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
+		protected:
+			typedef RBNode<value_type>*										link_type;
+			typedef const RBNode<value_type>*								const_link_type;
+		private:
+			typedef typename Alloc::template rebind<RBNode<Val> >::other	node_allocator_type;
+			typedef RBNode<Val>												node;
+			allocator_type													_alloc;
+			node_allocator_type												node_alloc;
+			node															root;
+
+			link_type	create_node(const value_type& x)
+			{
+				link_type	tmp = node_alloc.allocate(1);
+				node_alloc.construct(tmp->value, x);
+				return tmp;
+			}
 	};
 }
 
