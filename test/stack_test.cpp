@@ -103,7 +103,9 @@ void	stack_test()
 	{
 		std::cout << "    Operator == (true):\n";
 		int				arr1[] = { 3, 14, 15, 92, 65, 359 };
-		ft::vector<int> st(arr1, arr1 + 6);
+		ft::stack<int> st;
+		for (size_t i = 0; i < 6; i++)
+			st.push(arr1[i]);
 		std::cout << "      s == s\t:  " << (st == st ? "true\n" : "false\n");
 	}
 
@@ -113,8 +115,12 @@ void	stack_test()
 		std::cout << "    Operator == (false):\n";
 		int				arr1[] = { 3, 14, 15, 92, 65, 359 };
 		int				arr2[] = { 359, 65, 92, 15, 14, 3 };
-		ft::vector<int> st1(arr1, arr1 + 6);
-		ft::vector<int> st2(arr2, arr2 + 6);
+		ft::stack<int> st1;
+		ft::stack<int> st2;
+		for (size_t i = 0; i < 6; i++)
+			st1.push(arr1[i]);
+		for (size_t i = 0; i < 6; i++)
+			st2.push(arr2[i]);
 		std::cout << "      s1 == s2\t:  " << (st1 == st2 ? "true\n" : "false\n");
 	}
 
@@ -123,7 +129,9 @@ void	stack_test()
 	{
 		std::cout << "    Operator != (false):\n";
 		int				arr1[] = { 3, 14, 15, 92, 65, 359 };
-		ft::vector<int> st(arr1, arr1 + 6);
+		ft::stack<int> st;
+		for (size_t i = 0; i < 6; i++)
+			st.push(arr1[i]);
 		std::cout << "      s != s\t:  " << (st != st ? "true\n" : "false\n");
 	}
 
@@ -133,8 +141,12 @@ void	stack_test()
 		std::cout << "    Operator != (true):\n";
 		int				arr1[] = { 3, 14, 15, 92, 65, 359 };
 		int				arr2[] = { 359, 65, 92, 15, 14, 3 };
-		ft::vector<int> st1(arr1, arr1 + 6);
-		ft::vector<int> st2(arr2, arr2 + 6);
+		ft::stack<int> st1;
+		ft::stack<int> st2;
+		for (size_t i = 0; i < 6; i++)
+			st1.push(arr1[i]);
+		for (size_t i = 0; i < 6; i++)
+			st2.push(arr2[i]);
 		std::cout << "      s1 != s2\t:  " << (st1 != st2 ? "true\n" : "false\n");
 	}
 
@@ -143,7 +155,9 @@ void	stack_test()
 	{
 		std::cout << "    Operator < (false):\n";
 		int				arr1[] = { 3, 14, 15, 92, 65, 359 };
-		ft::vector<int> st(arr1, arr1 + 6);
+		ft::stack<int> st;
+		for (size_t i = 0; i < 6; i++)
+			st.push(arr1[i]);
 		std::cout << "      s < s\t:  " << (st < st ? "true\n" : "false\n");
 	}
 
@@ -153,8 +167,12 @@ void	stack_test()
 		std::cout << "    Operator < (true):\n";
 		int				arr1[] = { 3, 14, 15, 92, 65, 359 };
 		int				arr2[] = { 359, 65, 92, 15, 14, 3 };
-		ft::vector<int> st1(arr1, arr1 + 6);
-		ft::vector<int> st2(arr2, arr2 + 6);
+		ft::stack<int> st1;
+		ft::stack<int> st2;
+		for (size_t i = 0; i < 6; i++)
+			st1.push(arr1[i]);
+		for (size_t i = 0; i < 6; i++)
+			st2.push(arr2[i]);
 		std::cout << "      s1 < s2\t:  " << (st1 < st2 ? "true\n" : "false\n");
 	}
 
@@ -164,8 +182,12 @@ void	stack_test()
 		std::cout << "    Operator <= (false):\n";
 		int				arr1[] = { 3, 14, 15, 92, 65, 359 };
 		int				arr2[] = { 359, 65, 92, 15, 14, 3 };
-		ft::vector<int> st1(arr1, arr1 + 6);
-		ft::vector<int> st2(arr2, arr2 + 6);
+		ft::stack<int> st1;
+		ft::stack<int> st2;
+		for (size_t i = 0; i < 6; i++)
+			st1.push(arr1[i]);
+		for (size_t i = 0; i < 6; i++)
+			st2.push(arr2[i]);
 		std::cout << "      s2 <= s1\t:  " << (st2 <= st1 ? "true\n" : "false\n");
 	}
 
@@ -175,8 +197,12 @@ void	stack_test()
 		std::cout << "    Operator <= (true):\n";
 		int				arr1[] = { 3, 14, 15, 92, 65, 359 };
 		int				arr2[] = { 359, 65, 92, 15, 14, 3 };
-		ft::vector<int> st1(arr1, arr1 + 6);
-		ft::vector<int> st2(arr2, arr2 + 6);
+		ft::stack<int> st1;
+		ft::stack<int> st2;
+		for (size_t i = 0; i < 6; i++)
+			st1.push(arr1[i]);
+		for (size_t i = 0; i < 6; i++)
+			st2.push(arr2[i]);
 		std::cout << "      s1 <= s2\t:  " << (st1 <= st2 ? "true\n" : "false\n");
 	}
 
@@ -185,7 +211,9 @@ void	stack_test()
 	{
 		std::cout << "    Operator > (false):\n";
 		int				arr1[] = { 3, 14, 15, 92, 65, 359 };
-		ft::vector<int> st(arr1, arr1 + 6);
+		ft::stack<int> st;
+		for (size_t i = 0; i < 6; i++)
+			st.push(arr1[i]);
 		std::cout << "      s > s\t:  " << (st > st ? "true\n" : "false\n");
 	}
 
@@ -195,8 +223,12 @@ void	stack_test()
 		std::cout << "    Operator > (true):\n";
 		int				arr1[] = { 3, 14, 15, 92, 65, 359 };
 		int				arr2[] = { 359, 65, 92, 15, 14, 3 };
-		ft::vector<int> st1(arr1, arr1 + 6);
-		ft::vector<int> st2(arr2, arr2 + 6);
+		ft::stack<int> st1;
+		ft::stack<int> st2;
+		for (size_t i = 0; i < 6; i++)
+			st1.push(arr1[i]);
+		for (size_t i = 0; i < 6; i++)
+			st2.push(arr2[i]);
 		std::cout << "      s2 > s1\t:  " << (st2 > st1 ? "true\n" : "false\n");
 	}
 
@@ -206,8 +238,12 @@ void	stack_test()
 		std::cout << "    Operator >= (false):\n";
 		int				arr1[] = { 3, 14, 15, 92, 65, 359 };
 		int				arr2[] = { 359, 65, 92, 15, 14, 3 };
-		ft::vector<int> st1(arr1, arr1 + 6);
-		ft::vector<int> st2(arr2, arr2 + 6);
+		ft::stack<int> st1;
+		ft::stack<int> st2;
+		for (size_t i = 0; i < 6; i++)
+			st1.push(arr1[i]);
+		for (size_t i = 0; i < 6; i++)
+			st2.push(arr2[i]);
 		std::cout << "      s1 >= s2\t:  " << (st1 >= st2 ? "true\n" : "false\n");
 	}
 
@@ -217,8 +253,12 @@ void	stack_test()
 		std::cout << "    Operator >= (true):\n";
 		int				arr1[] = { 3, 14, 15, 92, 65, 359 };
 		int				arr2[] = { 359, 65, 92, 15, 14, 3 };
-		ft::vector<int> st1(arr1, arr1 + 6);
-		ft::vector<int> st2(arr2, arr2 + 6);
+		ft::stack<int> st1;
+		ft::stack<int> st2;
+		for (size_t i = 0; i < 6; i++)
+			st1.push(arr1[i]);
+		for (size_t i = 0; i < 6; i++)
+			st2.push(arr2[i]);
 		std::cout << "      s2 >= s1\t:  " << (st2 >= st1 ? "true\n" : "false\n");
 	}
 }
