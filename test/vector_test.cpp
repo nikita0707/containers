@@ -523,7 +523,7 @@ void	vector_test()
 		printAttr(vec);
 	}
 
-	std::cout << "\nNon-member function overloads:\n";
+	std::cout << "\n  Non-member function overloads:\n";
 	
 	{
 		std::cout << "    Operator == (true):\n";

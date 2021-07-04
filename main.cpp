@@ -21,9 +21,12 @@ class qwe
 		int i = 42;
 };
 void vector_test();
+void stack_test();
 void test()
 {
 	vector_test();
+	stack_test();
+	
 	// test_vector();
 	// std::cout << "\n";
 	// test_stack();
@@ -38,5 +41,5 @@ int main()
 	for (size_t i = 0; i < 1; i++)
 		test();
 	endc = clock();
-	printf("The above code block was executed in %.4f second(s)\n", ((double) endc - startc) / ((double) CLOCKS_PER_SEC));
+	printf("The above code block was executed in %.4f second(s)\n", (((double) endc - startc) / ((double) CLOCKS_PER_SEC)));
 }
