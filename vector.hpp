@@ -74,7 +74,7 @@ namespace ft
 				if (&other != this)
 				{
 					clear();
-					insert(end(), other.begin(), other.end());
+					insert(begin(), other.begin(), other.end());
 				}
 				return (*this);
 			}
@@ -317,9 +317,9 @@ namespace ft
 					}
 					for (size_type i = 0; i < n; i++)
 					{
-						_alloc.construct(&(*tmp), *first);
+						--last;
+						_alloc.construct(&(*tmp), *last);
 						--tmp;
-						++first;
 					}
 					finish += n;
 				}
