@@ -8,6 +8,7 @@
 #include "vector.hpp"
 #include "stack.hpp"
 #include "map.hpp"
+#include "set.hpp"
 #include <time.h>
 
 #include "tester/tester.hpp"
@@ -58,7 +59,7 @@ void test()
 	// std::cout << (stack1 < stack2);
 
 	// std::map<char, int>	map;
-	// std::set<char>	set;
+	std::set<char>	set;
 
 	test_vector();
 	std::cout << "\n";
