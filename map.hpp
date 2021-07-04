@@ -52,6 +52,15 @@ namespace ft
 
 			map(const map& x) : _comp(x._comp), _alloc(x._alloc), tree(x.tree) {}
 
+			map& operator= (const map& x)
+			{
+				if (this != &x)
+					tree = x.tree;
+				return (*this);
+			}
+
+			~map() {}
+
 			iterator				begin() { return tree.begin(); }
 			const_iterator			begin() const { return tree.begin(); }
 			iterator				end() { return tree.end(); }
@@ -65,7 +74,14 @@ namespace ft
 			size_type				size() const { return tree.size(); }
 			size_type				max_size() const { return tree.max_size(); }
 
-			mapped_type&			operator[](const key_type& k) {}
+			mapped_type&			operator[](const key_type& k)
+			{
+				iterator	i = tree.lower_bound(k);
+				
+				if (i == tree.end() || _comp(k, (*i).first))
+					i = tree.insert_unique(i, value_type(k, mapped_type()));
+				return (*i).second;
+			}
 
 			pair<iterator, bool>	insert(const value_type& val) { return tree.insert_unique(val); }
 
@@ -75,10 +91,42 @@ namespace ft
 						typename = typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type>
 			void					insert(InputIterator first, InputIterator last) { tree.insert_range_unique(first, last); }
 
+			void					erase(iterator position) { tree.erase(position); }
+
+			size_type				erase(const key_type& k) { return tree.erase(k); }
+
+			void					erase(iterator first, iterator last) { tree.erase(first, last); }
+
+			void					swap(map& x) { tree.swap(x.tree); }
+
+			void					clear() { tree.clear(); }
+
+			key_compare				key_comp() const { return _comp; }
+
+			value_compare			value_comp() const { return value_compare(_comp); }
+
+			iterator				find(const key_type& k) { return tree.find(k); }
+
+			const_iterator			find(const key_type& k) const { return tree.find(k); }
+
+			size_type				count(const key_type& k) const { return tree.find(k) == tree.end() ? 0 : 1; }
+
+			iterator				lower_bound(const key_type& k) { return tree.lower_bound(k); }
+
+			const_iterator			lower_bound(const key_type& k) const { return tree.lower_bound(k); }
+
+			iterator				upper_bound(const key_type& k) { return tree.upper_bound(k); }
+
+			const_iterator			upper_bound(const key_type& k) const { return tree.upper_bound(k); }
+
+			pair<iterator,iterator>	equal_range(const key_type& k) { return tree.equal_range(k); }
+			
+			pair<const_iterator,const_iterator>	equal_range(const key_type& k) const { return tree.equal_range(k); }
+
 		private:
-			key_compare															_comp;
-			allocator_type														_alloc;
-			tree_type															tree;
+			key_compare				_comp;
+			allocator_type			_alloc;
+			tree_type				tree;
 	};
 }
 

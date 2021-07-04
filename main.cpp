@@ -73,12 +73,27 @@ void test()
 	// vec.push_back(ft::make_pair(3, 3));
 	// vec.push_back(ft::make_pair(5, 5));
 	// ft::map<int, int>	mymap;
+	// ft::map<int, int>	mymap2;
 	// mymap.insert(vec.begin(), vec.end());
 	// mymap.insert(ft::make_pair(4, 4));
+	// mymap2.insert(ft::make_pair(41, 41));
+	// mymap2 = mymap;
 	// mymap.insert(ft::make_pair(6, 6));
-	// auto beg = mymap.rbegin();
-	// auto end = mymap.rend();
+	// mymap.erase(2);
+	// auto beg = mymap.begin();
+	// auto end = mymap.end();
 	// int i = 0;
+	// while (beg != end)
+	// {
+	// 	std::cout << (*beg).second << "\n";
+	// 	++beg;
+	// 	if (i == 10)
+	// 		break;
+	// 	i++;
+	// }
+	// std::cout << "\n";
+	// beg = mymap2.begin();
+	// end = mymap2.end();
 	// while (beg != end)
 	// {
 	// 	std::cout << (*beg).second << "\n";

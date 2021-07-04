@@ -137,6 +137,14 @@ namespace ft
 		return (!(lhs < rhs));
 	}
 
+	template <typename T>
+	void	swap(T& a, T& b)
+	{
+		T	tmp = a;
+		a = b;
+		b = tmp;
+	}
+
 	template <typename Arg1, typename Arg2, typename Result>
 	struct binary_function
 	{
@@ -179,12 +187,25 @@ namespace ft
 		private:
 			typedef typename Alloc::template rebind<RBNode<Val> >::other	node_allocator_type;
 			typedef RBNode<value_type>*										node;
+			typedef const RBNode<value_type>*								const_node;
 		public:
 			RBTree() {}
 			RBTree(const Compare& comp, const allocator_type& alloc = allocator_type())
 			: _comp(comp), _alloc(alloc), _size(0) { create_header(); }
 			RBTree(const RBTree& x) : _comp(x._comp), _alloc(x._alloc), _size(x._size) { create_header(); }
-			~RBTree() {}                                // impl
+			RBTree&	operator=(const RBTree& x)
+			{
+				if (this != &x)
+				{
+					clear();
+					_comp = x._comp;
+					get_key = x.get_key;
+					if (x.header->parent != 0)
+						header->parent = copy(x);
+				}
+				return (*this);
+			}
+			~RBTree() { erase(header->parent); node_alloc.deallocate(header, 1); }
 
 			iterator	begin() { return iterator(header->left); }
 			const_iterator	begin() const { return const_iterator(header->left); }
@@ -226,6 +247,68 @@ namespace ft
 				for (; first != last; ++first)
 					insert_unique(end(), *first);
 			}
+
+			void					erase(iterator position)
+			{
+				if (position != end())
+					erase_aux(position);
+			}
+
+			size_type				erase(const key_type& k)
+			{
+				ft::pair <iterator, iterator>	p = _equal_range(k);
+				const size_type					old_size = _size;
+
+				erase_aux(p.first, p.second);
+				return old_size - _size;
+			}
+
+			void					erase(iterator first, iterator last)
+			{
+				erase_aux(first, last);
+			}
+
+			void					swap(RBTree& t)
+			{
+				ft::swap(header, t.header);
+				ft::swap(_size, t._size);
+			}
+
+			void					clear()
+			{
+				erase(header->parent);
+				reset_header();
+				_size = 0;
+			}
+
+			iterator				find(const key_type& k)
+			{
+				iterator	j = lower_bound(header->parent, header, k);
+				if (j == end() || _comp(k, get_key(j._M_node->value)))
+					return end();
+				return j;
+			}
+			
+			const_iterator			find(const key_type& k) const
+			{
+				const_iterator	j = lower_bound(header->parent, header, k);
+				if (j == end() || _comp(k, get_key(j._M_node->value)))
+					return end();
+				return j;
+			}
+
+			iterator				lower_bound(const key_type& k) { return lower_bound(header->parent, header, k); }
+			
+			const_iterator			lower_bound(const key_type& k) const { return lower_bound(header->parent, header, k); }
+
+			iterator				upper_bound(const key_type& k) { return upper_bound(header->parent, header, k); }
+
+			const_iterator			upper_bound(const key_type& k) const { return upper_bound(header->parent, header, k); }
+
+			pair<iterator,iterator>	equal_range(const key_type& k) { return _equal_range(k); }
+			
+			pair<const_iterator,const_iterator>	equal_range(const key_type& k) const { return _equal_range(k); }
+
 		protected:
 			typedef RBNode<value_type>*										link_type;
 			typedef const RBNode<value_type>*								const_link_type;
@@ -237,12 +320,17 @@ namespace ft
 			size_type														_size;
 			KeyOfValue														get_key;
 
-			void	create_header()
+			void	reset_header()
 			{
-				header = node_alloc.allocate(1);
 				header->left = header;
 				header->right = header;
 				header->parent = nullptr;
+			}
+
+			void	create_header()
+			{
+				header = node_alloc.allocate(1);
+				reset_header();
 				header->color = red;
 			}
 
@@ -402,15 +490,9 @@ namespace ft
 				return iterator(z);
 			}
 
-			node					leftmost()
-			{
-				return header->left;
-			}
+			node					leftmost() { return header->left; }
 
-			node					rightmost()
-			{
-				return header->right;
-			}
+			node					rightmost() { return header->right; }
 
 			pair<node, node>		insert_hint_unique_pos(iterator pos, const key_type& k)
 			{
@@ -458,6 +540,356 @@ namespace ft
 				}
 				else
 					return _res(pos._M_node, 0);
+			}
+
+			node					minimum(node x)
+			{
+				while (x->left)
+					x = x->left;
+				return (x);
+			}
+
+			node					maximum(node x)
+			{
+				while (x->right)
+					x = x->right;
+				return (x);
+			}
+
+			node					rebalance_for_erase(node z)
+			{
+				node&	root = header->parent;
+				node&	lft = header->left;
+				node&	rig = header->right;
+				node	y = z;
+				node	x = 0;
+				node	x_parent = 0;
+
+				if (y->left == 0)
+					x = y->right;
+				else if (y->right == 0)
+					x = y->left;
+				else
+				{
+					y = y->right;
+					while (y->left != 0)
+						y = y->left;
+					x = y->right;
+				}
+				if (y != z)
+				{
+					z->left->parent = y;
+					y->left = z->left;
+					if (y != z->right)
+					{
+						x_parent = y->parent;
+						if (x) x->parent = y->parent;
+							y->parent->left = x;
+						y->right = z->right;
+						z->right->parent = y;
+					}
+					else
+						x_parent = y;
+					if (root == z)
+						root = y;
+					else if (z->parent->left == z)
+						z->parent->left = y;
+					else
+						z->parent->right = y;
+					y->parent = z->parent;
+					ft::swap(y->color, z->color);
+					y = z;
+				}
+				else
+				{
+					x_parent = y->parent;
+					if (x)
+						x->parent = y->parent;
+					if (root == z)
+						root = x;
+					else if (z->parent->left == z)
+						z->parent->left = x;
+					else
+						z->parent->right = x;
+					if (lft == z)
+					{
+						if (z->right == 0)
+							lft = z->parent;
+						else
+							lft = minimum(x);
+					}
+					if (rig == z)
+					{
+						if (z->left == 0)
+							rig = z->parent;
+						else
+							rig = maximum(x);
+					}
+				}
+				if (y->color != red)
+				{
+					while (x != root && (x == 0 || x->color == black))
+						if (x == x_parent->left)
+						{
+							node	w = x_parent->right;
+							if (w->color == red)
+							{
+								w->color = black;
+								x_parent->color = red;
+								tree_rotate_left(x_parent, root);
+								w = x_parent->right;
+							}
+							if ((w->left == 0 || w->left->color == black) && \
+								(w->right == 0 || w->right->color == black))
+							{
+								w->color = red;
+								x = x_parent;
+								x_parent = x_parent->parent;
+							}
+							else
+							{
+								if (w->right == 0 || w->right->color == black)
+								{
+									w->left->color = black;
+									w->color = red;
+									tree_rotate_right(w, root);
+									w = x_parent->right;
+								}
+								w->color = x_parent->color;
+								x_parent->color = black;
+								if (w->right)
+									w->right->color = black;
+								tree_rotate_left(x_parent, root);
+								break;
+							}
+						}
+						else
+						{
+							node	w = x_parent->left;
+							if (w->color == red)
+							{
+								w->color = black;
+								x_parent->color = red;
+								tree_rotate_right(x_parent, root);
+								w = x_parent->left;
+							}
+							if ((w->right == 0 || w->right->color == black) && \
+								(w->left == 0 || w->left->color == black))
+							{
+								w->color = red;
+								x = x_parent;
+								x_parent = x_parent->parent;
+							}
+							else
+							{
+								if (w->left == 0 || w->left->color == black)
+								{
+									w->right->color = black;
+									w->color = red;
+									tree_rotate_left(w, root);
+									w = x_parent->left;
+								}
+								w->color = x_parent->color;
+								x_parent->color = black;
+								if (w->left)
+									w->left->color = black;
+								tree_rotate_right(x_parent, root);
+								break;
+							}
+						}
+					if (x)
+						x->color = black;
+				}
+				return y;
+			}
+
+			void					drop_node(node p)
+			{
+				_alloc.destroy(&(p->value));
+				node_alloc.deallocate(p, 1);
+			}
+
+			void					erase_aux(iterator position)
+			{
+				node	y = rebalance_for_erase(position._M_node);
+
+				drop_node(y);
+				--_size;
+			}
+
+			iterator				lower_bound(node x, node y, const key_type& k)
+			{
+				while (x != 0)
+				{
+					if (!_comp(get_key(x->value), k))
+					{
+						y = x;
+						x = x->left;
+					}
+					else
+						x = x->right;
+				}
+				return iterator(y);
+			}
+
+			const_iterator			lower_bound(const_node x, const_node y, const key_type& k) const
+			{
+				while (x != 0)
+				{
+					if (!_comp(get_key(x->value), k))
+					{
+						y = x;
+						x = x->left;
+					}
+					else
+						x = x->right;
+				}
+				return const_iterator(y);
+			}
+
+			iterator				upper_bound(node x, node y, const key_type& k)
+			{
+				while (x != 0)
+				{
+					if (_comp(k, get_key(x->value)))
+					{
+						y = x;
+						x = x->left;
+					}
+					else
+						x = x->right;
+				}
+				return iterator(y);
+			}
+
+			const_iterator			upper_bound(const_node x, const_node y, const key_type& k) const
+			{
+				while (x != 0)
+				{
+					if (_comp(k, get_key(x->value)))
+					{
+						y = x;
+						x = x->left;
+					}
+					else
+						x = x->right;
+				}
+				return const_iterator(y);
+			}
+
+			ft::pair<iterator, iterator>	_equal_range(const key_type& k)
+			{
+				typedef ft::pair<iterator, iterator> _res;
+				node	x = header->parent;
+				node	y = header;
+
+				while (x != 0)
+				{
+					if (_comp(get_key(x->value), k))
+						x = x->right;
+					else if (_comp(k, get_key(x->value)))
+					{
+						y = x;
+						x = x->left;
+					}
+					else
+					{
+						node	xu(x);
+						node	yu(y);
+						y = x;
+						x = x->left;
+						xu = xu->right;
+						return _res(lower_bound(x, y, k), upper_bound(xu, yu, k));
+					}
+				}
+				return _res(iterator(y), iterator(y));
+			}
+
+			ft::pair<const_iterator, const_iterator>	_equal_range(const key_type& k) const
+			{
+				typedef ft::pair<const_iterator, const_iterator> _res;
+				node	x = header->parent;
+				node	y = header;
+
+				while (x != 0)
+				{
+					if (_comp(get_key(x->value), k))
+						x = x->right;
+					else if (_comp(k, get_key(x->value)))
+					{
+						y = x;
+						x = x->left;
+					}
+					else
+					{
+						node	xu(x);
+						node	yu(y);
+						y = x;
+						x = x->left;
+						xu = xu->right;
+						return _res(lower_bound(x, y, k), upper_bound(xu, yu, k));
+					}
+				}
+				return _res(const_iterator(y), const_iterator(y));
+			}
+
+			void					erase_aux(iterator first, iterator last)
+			{
+				if (first == begin() && last == end())
+					clear();
+				else
+					while (first != last)
+						erase_aux(first++);
+			}
+
+			void					erase(node x)
+			{
+				while (x != 0)
+				{
+					erase(x->right);
+					node y = x->left;
+					drop_node(x);
+					x = y;
+				}
+			}
+
+			node					clone_node(node x)
+			{
+				node	tmp = create_node(x->value);
+
+				tmp->color = x->color;
+				return tmp;
+			}
+
+			node					copy(node x, node p)
+			{
+				node	top = clone_node(x);
+
+				top->parent = p;
+				if (x->right)
+					top->right = copy(x->right, top);
+				p = top;
+				x = x->left;
+				while (x != 0)
+				{
+					node	y = clone_node(x);
+					p->left = y;
+					y->parent = p;
+					if (x->right)
+						y->right = copy(x->right, y);
+					p = y;
+					x = x->left;
+				}
+				return top;
+			}
+
+			node					copy(const RBTree& x)
+			{
+				node	root = copy(x.header->parent, header);
+				header->left = minimum(root);
+				header->right = maximum(root);
+				_size = x._size;
+				return root;
 			}
 	};
 }

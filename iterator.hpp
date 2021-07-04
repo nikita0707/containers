@@ -305,7 +305,7 @@ namespace ft
 			typedef typename ft::bidirectional_iterator<const T>::pointer		pointer;
 			typedef typename ft::bidirectional_iterator<const T>::reference		reference;
 			typedef RBTree_const_iterator<T>									_Self;
-			typedef RBNode<T>*													_Base_ptr;
+			typedef const RBNode<T>*											_Base_ptr;
 			typedef const RBNode<T>*											_Link_type;
 			typedef RBTree_iterator<T>											iterator;
 			RBTree_const_iterator() : _M_node() {}
