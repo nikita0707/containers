@@ -48,9 +48,9 @@ namespace ft
 						typename = typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type>
 			map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
 				const allocator_type& alloc = allocator_type())
-			: _comp(comp), _alloc(alloc), tree(comp, alloc) {}
+			: _comp(comp), _alloc(alloc), tree(comp, alloc) { tree.insert_range_unique(first, last); }
 
-			map(const map& x) : _comp(x._comp), _alloc(x._alloc), tree(x.comp, x.alloc) {}
+			map(const map& x) : _comp(x._comp), _alloc(x._alloc), tree(x.tree) {}
 
 			iterator				begin() { return tree.begin(); }
 			const_iterator			begin() const { return tree.begin(); }
@@ -69,11 +69,11 @@ namespace ft
 
 			pair<iterator, bool>	insert(const value_type& val) { return tree.insert_unique(val); }
 
-			iterator				insert(iterator position, const value_type& val) {}
+			iterator				insert(iterator position, const value_type& val) { return tree.insert_unique(position, val); }
 
 			template <class InputIterator,
 						typename = typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type>
-			void					insert(InputIterator first, InputIterator last) {}
+			void					insert(InputIterator first, InputIterator last) { tree.insert_range_unique(first, last); }
 
 		private:
 			key_compare															_comp;

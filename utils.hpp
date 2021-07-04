@@ -182,29 +182,19 @@ namespace ft
 		public:
 			RBTree() {}
 			RBTree(const Compare& comp, const allocator_type& alloc = allocator_type())
-			: _comp(comp), _alloc(alloc), _size(0) { create_end_node(); }
-			RBTree(const RBTree& x) : _comp(x._comp), _alloc(x._alloc), _size(0) { create_end_node(); }
+			: _comp(comp), _alloc(alloc), _size(0) { create_header(); }
+			RBTree(const RBTree& x) : _comp(x._comp), _alloc(x._alloc), _size(x._size) { create_header(); }
 			~RBTree() {}                                // impl
-			iterator	begin()
-			{
-				node	tmp = root;
-				while (tmp->left)
-					tmp = tmp->left;
-				return iterator(tmp);
-			}
-			const_iterator	begin() const
-			{
-				node	tmp = root;
-				while (tmp->left)
-					tmp = tmp->left;
-				return const_iterator(tmp);
-			}
-			iterator				end() { return iterator(end_node); }
-			const_iterator			end() const { return const_iterator(end_node); }
+
+			iterator	begin() { return iterator(header->left); }
+			const_iterator	begin() const { return const_iterator(header->left); }
+			iterator				end() { return iterator(header); }
+			const_iterator			end() const { return const_iterator(header); }
 			reverse_iterator		rbegin() { return reverse_iterator(end()); }
 			const_reverse_iterator	rbegin() const { return const_reverse_iterator(end()); }
 			reverse_iterator		rend() { return reverse_iterator(begin()); }
 			const_reverse_iterator	rend() const { return const_reverse_iterator(begin()); }
+			
 			bool					empty() const { return !_size; }
 			size_type				size() const { return _size; }
 			size_type				max_size() const { return node_alloc.max_size(); }
@@ -214,9 +204,27 @@ namespace ft
 				typedef pair<iterator, bool>	_res;
 				ft::pair<node, node>	res = get_insert_unique_pos(get_key(val));
 
+				_res	ret;
 				if (res.second)
 					return _res(insert(res.first, res.second, val), true);
 				return _res(iterator(res.first), false);
+			}
+
+			iterator				insert_unique(iterator position, const value_type& val)
+			{
+				pair<node, node>	res = insert_hint_unique_pos(position, get_key(val));
+
+				iterator	ret;
+				if (res.second)
+					return insert(res.first, res.second, val);
+				return iterator(res.first);
+			}
+
+			template <typename InputIterator>
+			void					insert_range_unique(InputIterator first, InputIterator last)
+			{
+				for (; first != last; ++first)
+					insert_unique(end(), *first);
 			}
 		protected:
 			typedef RBNode<value_type>*										link_type;
@@ -225,33 +233,35 @@ namespace ft
 			Compare															_comp;
 			allocator_type													_alloc;
 			node_allocator_type												node_alloc;
-			node															root;
-			node															end_node;
+			node															header;
 			size_type														_size;
 			KeyOfValue														get_key;
 
-			void	create_end_node()
+			void	create_header()
 			{
-				end_node = node_alloc.allocate(1);
-				end_node->left = nullptr;
-				end_node->right = nullptr;
-				end_node->parent = nullptr;
-				end_node->color = black;
-				root = end_node;
+				header = node_alloc.allocate(1);
+				header->left = header;
+				header->right = header;
+				header->parent = nullptr;
+				header->color = red;
 			}
 
 			node	create_node(const value_type& x)
 			{
 				node	tmp = node_alloc.allocate(1);
 				node_alloc.construct(&(tmp->value), x);
+				tmp->left = nullptr;
+				tmp->right = nullptr;
+				tmp->parent = nullptr;
+				tmp->color = black;
 				return tmp;
 			}
 
 			ft::pair<node, node>	get_insert_unique_pos(const key_type k)
 			{
 				typedef ft::pair<node, node>	res;
-				node	x = root;
-				node	y = end_node;
+				node	x = static_cast<node>(header->parent);
+				node	y = header;
 				bool	comp = true;
 				while (x != 0)
 				{
@@ -272,7 +282,7 @@ namespace ft
 				return res(j._M_node, 0);
 			}
 
-			void					tree_rotate_left(node x)
+			void					tree_rotate_left(node x, node& r)
 			{
 				node const y = x->right;
 
@@ -280,8 +290,8 @@ namespace ft
 				if (y->left !=0)
 					y->left->parent = x;
 				y->parent = x->parent;
-				if (x == root)
-					root = y;
+				if (x == r)
+					r = y;
 				else if (x == x->parent->left)
 					x->parent->left = y;
 				else
@@ -290,7 +300,7 @@ namespace ft
 				x->parent = y;
 			}
 
-			void					tree_rotate_right(node x)
+			void					tree_rotate_right(node x, node& r)
 			{
 				node const y = x->left;
 				
@@ -298,8 +308,8 @@ namespace ft
 				if (y->right != 0)
 					y->right->parent = x;
 				y->parent = x->parent;
-				if (x == root)
-					root = y;
+				if (x == r)
+					r = y;
 				else if (x == x->parent->right)
 					x->parent->right = y;
 				else
@@ -315,10 +325,24 @@ namespace ft
 				x->right = 0;
 				x->color = red;
 				if (insert_left)
+				{
 					p->left = x;
+					if (p == header)
+					{
+						header->parent = x;
+						header->right = x;
+					}
+					else if (p == header->left)
+						header->left = x;
+				}
 				else
+				{
 					p->right = x;
-				while (x != root && x->parent->color == red)
+					if (p == header->right)
+						header->right = x;
+				}
+				node&	r = header->parent;
+				while (x != r && x->parent->color == red)
 				{
 					node const xpp = x->parent->parent;
 					if (x->parent == xpp->left)
@@ -336,11 +360,11 @@ namespace ft
 							if (x == x->parent->right)
 							{
 								x = x->parent;
-								tree_rotate_left(x);
+								tree_rotate_left(x, r);
 							}
 							x->parent->color = black;
 							xpp->color = red;
-							tree_rotate_right(xpp);
+							tree_rotate_right(xpp, r);
 						}
 					}
 					else
@@ -358,24 +382,82 @@ namespace ft
 							if (x == x->parent->left)
 							{
 								x = x->parent;
-								tree_rotate_right(x);
+								tree_rotate_right(x, r);
 							}
 							x->parent->color = black;
 							xpp->color = red;
-							tree_rotate_left(xpp);
+							tree_rotate_left(xpp, r);
 						}
 					}
 				}
-				root->color = black;
+				r->color = black;
 			}
 
 			iterator				insert(node x, node p, const value_type& val)
 			{
-				bool insert_left = (x != 0 || p == end_node || _comp(get_key(val), get_key(p->value)));
+				bool insert_left = (x != 0 || p == header || _comp(get_key(val), get_key(p->value)));
 				node	z = create_node(val);
 				insert_and_rebalance(insert_left, z, p);
 				++_size;
 				return iterator(z);
+			}
+
+			node					leftmost()
+			{
+				return header->left;
+			}
+
+			node					rightmost()
+			{
+				return header->right;
+			}
+
+			pair<node, node>		insert_hint_unique_pos(iterator pos, const key_type& k)
+			{
+				typedef pair<node, node>	_res;
+
+				if (pos._M_node == header)
+				{
+					node	rig = rightmost();
+					if (_size > 0 && _comp(get_key(rig->value), k))
+						return _res(0, rig);
+					else
+						return get_insert_unique_pos(k);
+				}
+				else if (_comp(k, get_key(pos._M_node->value)))
+				{
+					node	lft = leftmost();
+					iterator	before = pos;
+					if (pos._M_node == lft)
+						return _res(lft, lft);
+					else if (_comp(get_key((--before)._M_node->value), k))
+					{
+						if (before._M_node->right == 0)
+							return _res(0, before._M_node);
+						else
+							return _res(pos._M_node, pos._M_node);
+					}
+					else
+						return get_insert_unique_pos(k);
+				}
+				else if (_comp(get_key(pos._M_node->value), k))
+				{
+					node	rig = rightmost();
+					iterator	after = pos;
+					if (pos._M_node == rig)
+						return _res(0, rig);
+					else if (_comp(k, get_key((++after)._M_node->value)))
+					{
+						if (pos._M_node->right == 0)
+							return _res(0, pos._M_node);
+						else
+							return _res(after._M_node, after._M_node);
+					}
+					else
+						return get_insert_unique_pos(k);
+				}
+				else
+					return _res(pos._M_node, 0);
 			}
 	};
 }

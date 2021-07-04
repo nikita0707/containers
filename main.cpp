@@ -64,41 +64,28 @@ void test()
 	std::cout << "\n";
 	test_stack();
 	std::cout << "\n";
-	// test_map();
+	test_map();
 
-	// std::map<int, int>	map;
-	// std::map<int, int>	map2;
-	// auto it1 = map2.begin();
-	// auto it = map.begin();
-	// std::cout << (it1 != it1);
-	ft::map<int, int>	mymap;
-	ft::pair<int, int>	p = ft::make_pair(1, 1);
-	mymap.insert(p);
-	p = ft::make_pair(2, 2);
-	mymap.insert(p);
-	p = ft::make_pair(3, 3);
-	mymap.insert(p);
-	p = ft::make_pair(4, 4);
-	mymap.insert(p);
-	p = ft::make_pair(5, 5);
-	mymap.insert(p);
-	// mymap[1] = 1;
-	// mymap[2] = 2;
-	// mymap[3] = 3;
-	// mymap[4] = 4;
-	// mymap[5] = 5;
-	auto beg = mymap.begin();
-	auto end = mymap.end();
-	while (beg != end)
-	{
-		std::cout << (*beg).second << "\n";
-		++beg;
-	}
-	// auto end = mymap.end();
+	// ft::vector<ft::pair<int, int> >	vec;
+	// vec.push_back(ft::make_pair(1, 1));
+	// vec.push_back(ft::make_pair(2, 2));
+	// vec.push_back(ft::make_pair(4, 4));
+	// vec.push_back(ft::make_pair(3, 3));
+	// vec.push_back(ft::make_pair(5, 5));
+	// ft::map<int, int>	mymap;
+	// mymap.insert(vec.begin(), vec.end());
+	// mymap.insert(ft::make_pair(4, 4));
+	// mymap.insert(ft::make_pair(6, 6));
+	// auto beg = mymap.rbegin();
+	// auto end = mymap.rend();
+	// int i = 0;
 	// while (beg != end)
 	// {
-	// 	std::cout << (*beg).first << "\n";
-	// 	beg++;
+	// 	std::cout << (*beg).second << "\n";
+	// 	++beg;
+	// 	if (i == 10)
+	// 		break;
+	// 	i++;
 	// }
 }
 

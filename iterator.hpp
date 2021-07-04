@@ -254,7 +254,7 @@ namespace ft
 				{
 					x = x->right;
 					while (x->left != 0)
-					x = x->left;
+						x = x->left;
 				}
 				else
 				{
@@ -304,13 +304,15 @@ namespace ft
 			typedef typename ft::bidirectional_iterator<T>::difference_type		difference_type;
 			typedef typename ft::bidirectional_iterator<const T>::pointer		pointer;
 			typedef typename ft::bidirectional_iterator<const T>::reference		reference;
-			typedef RBTree_const_iterator<T>											_Self;
-			typedef RBNode<T>													_Base_ptr;
+			typedef RBTree_const_iterator<T>									_Self;
+			typedef RBNode<T>*													_Base_ptr;
 			typedef const RBNode<T>*											_Link_type;
 			typedef RBTree_iterator<T>											iterator;
 			RBTree_const_iterator() : _M_node() {}
 			explicit RBTree_const_iterator(_Base_ptr x) : _M_node(x) {}
 			RBTree_const_iterator(const RBTree_const_iterator& copy) : _M_node(copy._M_node) {}
+			template <typename Iter>
+			RBTree_const_iterator(const RBTree_iterator<Iter>& i) : _M_node(i._M_node) {}
 			~RBTree_const_iterator() {}
 			RBTree_const_iterator	&operator=(const RBTree_const_iterator& other)
 			{
@@ -327,20 +329,20 @@ namespace ft
 			_Self		operator--(int) { _Self tmp = *this; _M_node = RBTreeDecrement(); return tmp; }
 			friend bool	operator==(const _Self&x, const _Self&y) { return x._M_node == y._M_node; }
 			friend bool	operator!=(const _Self&x, const _Self&y) { return x._M_node != y._M_node; }
-			pointer		_M_node;
+			_Base_ptr	_M_node;
 		private:
-			pointer		RBTreeIncrement()
+			_Base_ptr		RBTreeIncrement()
 			{
-				pointer	x = _M_node;
+				_Base_ptr	x = _M_node;
 				if (x->right != 0)
 				{
 					x = x->right;
 					while (x->left != 0)
-					x = x->left;
+						x = x->left;
 				}
 				else
 				{
-					pointer	y = x->parent;
+					_Base_ptr	y = x->parent;
 					while (x == y->right)
 					{
 						x = y;
@@ -351,21 +353,21 @@ namespace ft
 				}
 				return x;
 			}
-			pointer		RBTreeDecrement()
+			_Base_ptr		RBTreeDecrement()
 			{
-				pointer	x = _M_node;
+				_Base_ptr	x = _M_node;
 				if (x->color == red && x->parent->parent == x)
 					x = x->right;
 				else if (x->left != 0)
 				{
-					pointer	y = x->left;
+					_Base_ptr	y = x->left;
 					while (y->right != 0)
 						y = y->right;
 					x = y;
 				}
 				else
 				{
-					pointer	y = x->parent;
+					_Base_ptr	y = x->parent;
 					while (x == y->left)
 					{
 						x = y;
