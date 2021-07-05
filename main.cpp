@@ -1,6 +1,7 @@
 #include <iostream>
 #include <time.h>
 #include <cstdlib>
+#include <cstdio>
 #include "test/test.hpp"
 
 void	test(char mask)
@@ -77,6 +78,6 @@ int		main(int argc, char** argv)
 	for (int i = 0; i < count; i++)
 		test(mask);
 	endc = clock();
-	printf("The above code block was executed in %.5f second(s)\n", (((double) endc - startc) / ((double) CLOCKS_PER_SEC)));
+	printf("\nAverage time to complete the test: %.5f second(s)\n", (((double) endc - startc) / ((double) CLOCKS_PER_SEC)) / count);
 	return 0;
 }
