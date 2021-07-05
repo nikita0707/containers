@@ -12,6 +12,7 @@
 #include <time.h>
 
 #include "tester/tester.hpp"
+#include "test/test.hpp"
 
 class qwe
 {
@@ -20,14 +21,13 @@ class qwe
 		~qwe() {std::cout << "die\n";}
 		int i = 42;
 };
-void vector_test();
-void stack_test();
-void	map_test();
+
 void test()
 {
 	vector_test();
 	stack_test();
 	map_test();
+	set_test();
 	
 	// test_vector();
 	// std::cout << "\n";

@@ -576,7 +576,7 @@ void	map_test()
 	std::cout << "\n";
 
 	{
-		std::cout << "    Equal range existing key:\n";
+		std::cout << "    Equal range non-existing key:\n";
 		int			iarr[] = { 1, 2, 3, 4, 5, 6 };
 		std::string	sarr[] = { "One", "Two", "Three", "Four", "Five", "Six" };
 		ispair		parr[6];
