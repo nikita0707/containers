@@ -32,7 +32,13 @@ void	toLower(char* str)
 
 int		wrondArgs()
 {
-	std::cerr << "Usage: ./test [number_of_repetitions] [container_names(optional)]\n";
+	std::string	suf;
+	#ifdef STD
+		suf = "std";
+	#else
+		suf = "ft";
+	#endif
+	std::cerr << "Usage: ./test_" << suf << " [number_of_repetitions] [container_names(optional)]\n";
 	std::cerr << "number_of_repetitions: number of test repetitions. Required for greater accuracy in measuring the speed of containers.\n";
 	std::cerr << "container_names: container names to test. Avaliable containers: Vector, Stack, Map, Set.\n";
 	return 1;

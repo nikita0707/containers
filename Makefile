@@ -1,6 +1,6 @@
-FT= test_ft
+FTNAME= test_ft
 
-STD= test_std
+STDNAME= test_std
 
 SOURCE=	main.cpp \
 		test/vector_test.cpp \
@@ -8,24 +8,29 @@ SOURCE=	main.cpp \
 		test/map_test.cpp \
 		test/set_test.cpp
 
-OSOURCE= $(SOURCE:.cpp=.o)
+FTOSOURCE= $(SOURCE:.cpp=.o)
 
-all: $(FT) $(STD)
+STDOSOURCE= $(addsuffix s.o, $(basename $(SOURCE)))
+
+all: $(FTNAME) $(STDNAME)
 
 %.o: %.cpp
-	gcc -Wall -Werror -Wextra -c $< -o $@
+	clang++ -c $< -o $@
 
-$(FT): $(OSOURCE)
-	gcc $(OSOURCE) -o $(FT)
+%s.o: %.cpp
+	clang++ -c $(patsubst *s.cpp, *.cpp, $<) -o $@ -D STD
 
-$(STD): $(OSOURCE)
-	gcc $(OSOURCE) -o $(STD) -D STD
+$(FTNAME): $(FTOSOURCE)
+	clang++ $(FTOSOURCE) -o $(FTNAME)
+
+$(STDNAME): $(STDOSOURCE)
+	clang++ $(STDOSOURCE) -o $(STDNAME)
 
 clean:
-	rm -rf $(OSOURCE)
+	rm -rf $(FTOSOURCE) $(STDOSOURCE)
 
 fclean: clean
-	rm -rf $(STD) $(STD)
+	rm -rf $(FTNAME) $(STDNAME)
 
 re: fclean all
 
