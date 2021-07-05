@@ -192,7 +192,12 @@ namespace ft
 			RBTree() {}
 			RBTree(const Compare& comp, const allocator_type& alloc = allocator_type())
 			: _comp(comp), _alloc(alloc), _size(0) { create_header(); }
-			RBTree(const RBTree& x) : _comp(x._comp), _alloc(x._alloc), _size(x._size) { create_header(); }
+			RBTree(const RBTree& x) : _comp(x._comp), _alloc(x._alloc), _size(x._size)
+			{
+				create_header();
+				if (x.header->parent != 0)
+					header->parent = copy(x);
+			}
 			RBTree&	operator=(const RBTree& x)
 			{
 				if (this != &x)

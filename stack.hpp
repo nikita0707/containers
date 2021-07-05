@@ -17,6 +17,17 @@ namespace ft
 
 			~stack() {}
 
+			stack&		operator=(const stack& other)
+			{
+				if (this != &other)
+				{
+					while (size() > 0)
+						pop();
+					c = other.c;
+				}
+				return *this;
+			}
+
 			bool				empty() const { return c.empty(); }
 			size_type			size() const { return c.size(); }
 			value_type&			top() { return c.back(); }

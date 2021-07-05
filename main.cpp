@@ -22,10 +22,12 @@ class qwe
 };
 void vector_test();
 void stack_test();
+void	map_test();
 void test()
 {
 	vector_test();
 	stack_test();
+	map_test();
 	
 	// test_vector();
 	// std::cout << "\n";
