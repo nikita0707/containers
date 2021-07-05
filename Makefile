@@ -15,10 +15,10 @@ STDOSOURCE= $(addsuffix s.o, $(basename $(SOURCE)))
 all: $(FTNAME) $(STDNAME)
 
 %.o: %.cpp
-	clang++ -c $< -o $@
+	clang++ -Wall -Werror -Wextra --std=c++98 -c $< -o $@
 
 %s.o: %.cpp
-	clang++ -c $(patsubst *s.cpp, *.cpp, $<) -o $@ -D STD
+	clang++ -Wall -Werror -Wextra --std=c++98 -c $(patsubst *s.cpp, *.cpp, $<) -o $@ -D STD
 
 $(FTNAME): $(FTOSOURCE)
 	clang++ $(FTOSOURCE) -o $(FTNAME)

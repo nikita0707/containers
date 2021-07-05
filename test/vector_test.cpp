@@ -125,9 +125,9 @@ void	vector_test()
 		int				arr[] = { 3, 14, 15, 92, 65, 359 };
 		ft::vector<int> vec(arr, arr + 6);
 		std::cout << "      Content\t:  [";
-		typename ft::vector<int>::iterator	beg = vec.begin();
-		typename ft::vector<int>::iterator	it = beg;
-		typename ft::vector<int>::iterator	end = vec.end();
+		ft::vector<int>::iterator	beg = vec.begin();
+		ft::vector<int>::iterator	it = beg;
+		ft::vector<int>::iterator	end = vec.end();
 		for (; it != end; ++it)
 		{
 			if (it != beg)
@@ -144,9 +144,9 @@ void	vector_test()
 		int				arr[] = { 3, 14, 15, 92, 65, 359 };
 		ft::vector<int> vec(arr, arr + 6);
 		std::cout << "      Content\t:  [";
-		typename ft::vector<int>::const_iterator	beg = vec.begin();
-		typename ft::vector<int>::const_iterator	it = beg;
-		typename ft::vector<int>::const_iterator	end = vec.end();
+		ft::vector<int>::const_iterator	beg = vec.begin();
+		ft::vector<int>::const_iterator	it = beg;
+		ft::vector<int>::const_iterator	end = vec.end();
 		for (; it != end; ++it)
 		{
 			if (it != beg)
@@ -163,9 +163,9 @@ void	vector_test()
 		int				arr[] = { 3, 14, 15, 92, 65, 359 };
 		ft::vector<int> vec(arr, arr + 6);
 		std::cout << "      Content\t:  [";
-		typename ft::vector<int>::reverse_iterator	beg = vec.rbegin();
-		typename ft::vector<int>::reverse_iterator	it = beg;
-		typename ft::vector<int>::reverse_iterator	end = vec.rend();
+		ft::vector<int>::reverse_iterator	beg = vec.rbegin();
+		ft::vector<int>::reverse_iterator	it = beg;
+		ft::vector<int>::reverse_iterator	end = vec.rend();
 		for (; it != end; ++it)
 		{
 			if (it != beg)
@@ -182,9 +182,9 @@ void	vector_test()
 		int				arr[] = { 3, 14, 15, 92, 65, 359 };
 		ft::vector<int> vec(arr, arr + 6);
 		std::cout << "      Content\t:  [";
-		typename ft::vector<int>::const_reverse_iterator	beg = vec.rbegin();
-		typename ft::vector<int>::const_reverse_iterator	it = beg;
-		typename ft::vector<int>::const_reverse_iterator	end = vec.rend();
+		ft::vector<int>::const_reverse_iterator	beg = vec.rbegin();
+		ft::vector<int>::const_reverse_iterator	it = beg;
+		ft::vector<int>::const_reverse_iterator	end = vec.rend();
 		for (; it != end; ++it)
 		{
 			if (it != beg)

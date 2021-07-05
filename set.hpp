@@ -34,8 +34,7 @@ namespace ft
 			explicit set(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
 			: _comp(comp), tree(comp, alloc) {}
 
-			template <class InputIterator,
-						typename = typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type>
+			template <class InputIterator>
 			set(InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
 					const allocator_type& alloc = allocator_type())
 			: _comp(comp), tree(comp, alloc) { tree.insert_range_unique(first, last); }
@@ -68,8 +67,7 @@ namespace ft
 
 			iterator				insert(iterator position, const value_type& val) { return tree.insert_unique(position, val); }
 
-			template <class InputIterator,
-						typename = typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type>
+			template <class InputIterator>
 			void					insert(InputIterator first, InputIterator last) { tree.insert_range_unique(first, last); }
 
 			void					erase(iterator position) { tree.erase(position); }

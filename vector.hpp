@@ -33,32 +33,17 @@ namespace ft
 							const allocator_type& alloc = allocator_type())
 			: _alloc(alloc), start(0), finish(0), end_of_storage(0)
 			{
-				start = _alloc.allocate(n);
-				finish = start;
-				end_of_storage = start + n;
-				for (size_type i = 0; i < n; i++)
-				{
-					_alloc.construct(finish, val);
-					++finish;
-				}
+				typedef typename ft::is_integral<size_type>::type	Integral;
+				_init(n, val, Integral());
 			}
 
-			template <class InputIterator,
-						typename = typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type>
+			template <class InputIterator>
          	vector(InputIterator first, InputIterator last,
 			 		const allocator_type& alloc = allocator_type())
 			: _alloc(alloc), start(0), finish(0), end_of_storage(0)
 			{
-				difference_type	n = ft::distance(first, last);
-				start = _alloc.allocate(n);
-				finish = start;
-				end_of_storage = start + n;
-				while (first != last)
-				{
-					_alloc.construct(finish, *first);
-					++first;
-					++finish;
-				}
+				typedef typename ft::is_integral<InputIterator>::type	Integral;
+				_init(first, last, Integral());
 			}
 
 			vector(const vector& x)
@@ -163,69 +148,16 @@ namespace ft
 
 			//						Modifiers
 
-			template <class InputIterator,
-						typename = typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type>
+			template <class InputIterator>
 			void					assign(InputIterator first, InputIterator last)
 			{
-				size_type	n = ft::distance(first, last);
-				if (n > capacity())
-				{
-					clear();
-					_alloc.deallocate(start, capacity());
-					start = _alloc.allocate(n);
-					finish = start;
-					end_of_storage = start + n;
-				}
-				else
-				{
-					if (n != capacity())
-					{
-						iterator	temp = start + n;
-						iterator	end = this->end();
-						while (temp != end)
-						{
-							_alloc.destroy(&(*temp));
-							++temp;
-						}
-					}
-					finish = start;
-				}
-				while (first != last)
-				{
-					_alloc.construct(finish, *first);
-					++finish;
-					++first;
-				}
+				typedef typename ft::is_integral<InputIterator>::type	Integral;
+				_assign(first, last, Integral());
 			}
 			void					assign(size_type n, const value_type& val) 
 			{
-				if (n > capacity())
-				{
-					clear();
-					_alloc.deallocate(start, capacity());
-					start = _alloc.allocate(n);
-					finish = start;
-					end_of_storage = start + n;
-				}
-				else
-				{
-					if (n != capacity())
-					{
-						iterator	temp = start + n;
-						iterator	end = this->end();
-						while (temp != end)
-						{
-							_alloc.destroy(&(*temp));
-							++temp;
-						}
-					}
-					finish = start;
-				}
-				for (size_type i = 0; i < n; i++)
-				{
-					_alloc.construct(finish, val);
-					++finish;
-				}
+				typedef typename ft::is_integral<size_type>::type	Integral;
+				_assign(n, val, Integral());
 			}
 			void					push_back(const value_type& val)
 			{
@@ -252,109 +184,14 @@ namespace ft
 			}
 			void					insert(iterator position, size_type n, const value_type& val)
 			{
-				if (n == 0)
-					return ;
-				if (size() + n <= capacity())
-				{
-					value_type	copy(val);
-					iterator	tmp = start + size() + n - 1;
-					while (tmp != position + n - 1)
-					{
-						_alloc.construct(&(*tmp), *(tmp - n));
-						--tmp;
-					}
-					for (size_type i = 0; i < n; i++)
-					{
-						_alloc.construct(&(*tmp), copy);
-						--tmp;
-					}
-					finish += n;
-				}
-				else
-				{
-					size_type	pos_idx = &(*position) - start;
-					size_type	new_capacity = size() * 2;
-					if (new_capacity < size() + n)
-						new_capacity = size() + n;
-					if (new_capacity > max_size())
-						throw std::length_error("vector::insert ");
-					size_type	old_size = size();
-					size_type	old_capacity = capacity();
-					pointer		old_start = start;
-					start = _alloc.allocate(new_capacity);
-					finish = start;
-					end_of_storage = start + new_capacity;
-					for (size_type i = 0; i < old_size + n; i++)
-					{
-						if (i >= pos_idx && i < pos_idx + n)
-							_alloc.construct(finish, val);
-						else
-						{
-							_alloc.construct(finish, *old_start);
-							_alloc.destroy(old_start);
-							++old_start;
-						}
-						++finish;
-					}
-					old_start -= old_size;
-					_alloc.deallocate(old_start, old_capacity);
-				}
+				typedef typename ft::is_integral<size_type>::type	Integral;
+				_insert(position, n, val, Integral());
 			}
-			template <class InputIterator,
-						typename = typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type>
+			template <class InputIterator>
     		void					insert(iterator position, InputIterator first, InputIterator last)
 			{
-				size_type	n = ft::distance(first, last);
-				if (n == 0)
-					return ;
-				if (size() + n <= capacity())
-				{
-					iterator	tmp = start + size() + n - 1;
-					while (tmp != position + n - 1)
-					{
-						_alloc.construct(&(*tmp), *(tmp - n));
-						--tmp;
-					}
-					for (size_type i = 0; i < n; i++)
-					{
-						--last;
-						_alloc.construct(&(*tmp), *last);
-						--tmp;
-					}
-					finish += n;
-				}
-				else
-				{
-					size_type	pos_idx = &(*position) - start;
-					size_type	new_capacity = size() * 2;
-					if (new_capacity < size() + n)
-						new_capacity = size() + n;
-					if (new_capacity > max_size())
-						throw std::length_error("vector::insert ");
-					size_type	old_size = size();
-					size_type	old_capacity = capacity();
-					pointer		old_start = start;
-					start = _alloc.allocate(new_capacity);
-					finish = start;
-					end_of_storage = start + new_capacity;
-					for (size_type i = 0; i < old_size + n; i++)
-					{
-						if (i >= pos_idx && i < pos_idx + n)
-						{
-							_alloc.construct(finish, *first);
-							++first;
-						}
-						else
-						{
-							_alloc.construct(finish, *old_start);
-							_alloc.destroy(old_start);
-							++old_start;
-						}
-						++finish;
-					}
-					old_start -= old_size;
-					_alloc.deallocate(old_start, old_capacity);
-				}
+				typedef typename ft::is_integral<InputIterator>::type	Integral;
+				_insert(position, first, last, Integral());
 			}
 			iterator				erase(iterator position)
 			{
@@ -414,6 +251,205 @@ namespace ft
 			pointer			start;
 			pointer			finish;
 			pointer			end_of_storage;
+
+			template <class InputIterator>
+			void	_init(InputIterator first, InputIterator last, ft::false_type)
+			{
+				difference_type	n = ft::distance(first, last);
+				start = _alloc.allocate(n);
+				finish = start;
+				end_of_storage = start + n;
+				while (first != last)
+				{
+					_alloc.construct(finish, *first);
+					++first;
+					++finish;
+				}
+			}
+
+			void	_init(size_type n, const value_type& val, ft::true_type)
+			{
+				start = _alloc.allocate(n);
+				finish = start;
+				end_of_storage = start + n;
+				for (size_type i = 0; i < n; i++)
+				{
+					_alloc.construct(finish, val);
+					++finish;
+				}
+			}
+
+			template <typename InputIterator>
+			void					_assign(InputIterator first, InputIterator last, ft::false_type)
+			{
+				size_type	n = ft::distance(first, last);
+				if (n > capacity())
+				{
+					clear();
+					_alloc.deallocate(start, capacity());
+					start = _alloc.allocate(n);
+					finish = start;
+					end_of_storage = start + n;
+				}
+				else
+				{
+					if (n != capacity())
+					{
+						iterator	temp = start + n;
+						iterator	end = this->end();
+						while (temp != end)
+						{
+							_alloc.destroy(&(*temp));
+							++temp;
+						}
+					}
+					finish = start;
+				}
+				while (first != last)
+				{
+					_alloc.construct(finish, *first);
+					++finish;
+					++first;
+				}
+			}
+
+			void					_assign(size_type n, const value_type& val, ft::true_type)
+			{
+				if (n > capacity())
+				{
+					clear();
+					_alloc.deallocate(start, capacity());
+					start = _alloc.allocate(n);
+					finish = start;
+					end_of_storage = start + n;
+				}
+				else
+				{
+					if (n != capacity())
+					{
+						iterator	temp = start + n;
+						iterator	end = this->end();
+						while (temp != end)
+						{
+							_alloc.destroy(&(*temp));
+							++temp;
+						}
+					}
+					finish = start;
+				}
+				for (size_type i = 0; i < n; i++)
+				{
+					_alloc.construct(finish, val);
+					++finish;
+				}
+			}
+
+			template <class InputIterator>
+			void					_insert(iterator position, InputIterator first, InputIterator last, ft::false_type)
+			{
+				size_type	n = ft::distance(first, last);
+				if (n == 0)
+					return ;
+				if (size() + n <= capacity())
+				{
+					iterator	tmp = start + size() + n - 1;
+					while (tmp != position + n - 1)
+					{
+						_alloc.construct(&(*tmp), *(tmp - n));
+						--tmp;
+					}
+					for (size_type i = 0; i < n; i++)
+					{
+						--last;
+						_alloc.construct(&(*tmp), *last);
+						--tmp;
+					}
+					finish += n;
+				}
+				else
+				{
+					size_type	pos_idx = &(*position) - start;
+					size_type	new_capacity = size() * 2;
+					if (new_capacity < size() + n)
+						new_capacity = size() + n;
+					if (new_capacity > max_size())
+						throw std::length_error("vector::insert ");
+					size_type	old_size = size();
+					size_type	old_capacity = capacity();
+					pointer		old_start = start;
+					start = _alloc.allocate(new_capacity);
+					finish = start;
+					end_of_storage = start + new_capacity;
+					for (size_type i = 0; i < old_size + n; i++)
+					{
+						if (i >= pos_idx && i < pos_idx + n)
+						{
+							_alloc.construct(finish, *first);
+							++first;
+						}
+						else
+						{
+							_alloc.construct(finish, *old_start);
+							_alloc.destroy(old_start);
+							++old_start;
+						}
+						++finish;
+					}
+					old_start -= old_size;
+					_alloc.deallocate(old_start, old_capacity);
+				}
+			}
+
+			void					_insert(iterator position, size_type n, const value_type& val, ft::true_type)
+			{
+				if (n == 0)
+					return ;
+				if (size() + n <= capacity())
+				{
+					value_type	copy(val);
+					iterator	tmp = start + size() + n - 1;
+					while (tmp != position + n - 1)
+					{
+						_alloc.construct(&(*tmp), *(tmp - n));
+						--tmp;
+					}
+					for (size_type i = 0; i < n; i++)
+					{
+						_alloc.construct(&(*tmp), copy);
+						--tmp;
+					}
+					finish += n;
+				}
+				else
+				{
+					size_type	pos_idx = &(*position) - start;
+					size_type	new_capacity = size() * 2;
+					if (new_capacity < size() + n)
+						new_capacity = size() + n;
+					if (new_capacity > max_size())
+						throw std::length_error("vector::insert ");
+					size_type	old_size = size();
+					size_type	old_capacity = capacity();
+					pointer		old_start = start;
+					start = _alloc.allocate(new_capacity);
+					finish = start;
+					end_of_storage = start + new_capacity;
+					for (size_type i = 0; i < old_size + n; i++)
+					{
+						if (i >= pos_idx && i < pos_idx + n)
+							_alloc.construct(finish, val);
+						else
+						{
+							_alloc.construct(finish, *old_start);
+							_alloc.destroy(old_start);
+							++old_start;
+						}
+						++finish;
+					}
+					old_start -= old_size;
+					_alloc.deallocate(old_start, old_capacity);
+				}
+			}
 	};
 
 	//								Non-member function overloads

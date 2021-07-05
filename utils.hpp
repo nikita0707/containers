@@ -16,10 +16,10 @@ namespace ft
 	template<typename Tname, Tname v>
 	struct integral_constant
 	{
-		static constexpr Tname					value = v;
+		static const Tname						value = v;
 		typedef Tname							value_type;
 		typedef integral_constant<Tname, v>		type;
-		constexpr operator value_type() const noexcept { return value; }
+		operator value_type() const { return value; }
 	};
 
 	typedef integral_constant<bool, true>		true_type;
@@ -39,12 +39,6 @@ namespace ft
 
 	template<>
 	struct is_integral_helper<unsigned char> : public true_type {};
-
-	template<>
-	struct is_integral_helper<char16_t> : public true_type {};
-
-	template<>
-	struct is_integral_helper<char32_t> : public true_type {};
 
 	template<>
 	struct is_integral_helper<wchar_t> : public true_type {};
@@ -342,7 +336,7 @@ namespace ft
 			node	create_node(const value_type& x)
 			{
 				node	tmp = node_alloc.allocate(1);
-				node_alloc.construct(&(tmp->value), x);
+				_alloc.construct(&(tmp->value), x);
 				tmp->left = 0;
 				tmp->right = 0;
 				tmp->parent = 0;
