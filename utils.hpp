@@ -87,7 +87,7 @@ namespace ft
 		pair(const T1& x, const T2& y) : first(x), second(y) {}
 		template<class U1, class U2>
 		pair(const pair<U1, U2>& p) : first(p.first), second(p.second) {}
-		pair&		operator=( const pair& other )
+		pair&		operator=(const pair& other)
 		{
 			if (this != &other)
 			{
@@ -329,7 +329,7 @@ namespace ft
 			{
 				header->left = header;
 				header->right = header;
-				header->parent = nullptr;
+				header->parent = 0;
 			}
 
 			void	create_header()
@@ -343,9 +343,9 @@ namespace ft
 			{
 				node	tmp = node_alloc.allocate(1);
 				node_alloc.construct(&(tmp->value), x);
-				tmp->left = nullptr;
-				tmp->right = nullptr;
-				tmp->parent = nullptr;
+				tmp->left = 0;
+				tmp->right = 0;
+				tmp->parent = 0;
 				tmp->color = black;
 				return tmp;
 			}

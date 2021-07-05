@@ -27,11 +27,11 @@ namespace ft
 			typedef size_t													size_type;
 
 			explicit vector(const allocator_type& alloc = allocator_type())
-			: _alloc(alloc), start(nullptr), finish(nullptr), end_of_storage(nullptr) {}
+			: _alloc(alloc), start(0), finish(0), end_of_storage(0) {}
 
 			explicit vector(size_type n, const value_type& val = value_type(),
 							const allocator_type& alloc = allocator_type())
-			: _alloc(alloc), start(nullptr), finish(nullptr), end_of_storage(nullptr)
+			: _alloc(alloc), start(0), finish(0), end_of_storage(0)
 			{
 				start = _alloc.allocate(n);
 				finish = start;
@@ -47,7 +47,7 @@ namespace ft
 						typename = typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type>
          	vector(InputIterator first, InputIterator last,
 			 		const allocator_type& alloc = allocator_type())
-			: _alloc(alloc), start(nullptr), finish(nullptr), end_of_storage(nullptr)
+			: _alloc(alloc), start(0), finish(0), end_of_storage(0)
 			{
 				difference_type	n = ft::distance(first, last);
 				start = _alloc.allocate(n);
@@ -62,7 +62,7 @@ namespace ft
 			}
 
 			vector(const vector& x)
-			: _alloc(x._alloc), start(nullptr), finish(nullptr), end_of_storage(nullptr)
+			: _alloc(x._alloc), start(0), finish(0), end_of_storage(0)
 			{
 				insert(begin(), x.begin(), x.end());
 			}

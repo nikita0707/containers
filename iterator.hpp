@@ -1,7 +1,7 @@
 #ifndef ITERATOR_HPP
 # define ITERATOR_HPP
 
-# include <stddef.h>
+# include <cstddef>
 # include "iterator_traits.hpp"
 # include "RBNode.hpp"
 
@@ -37,7 +37,7 @@ namespace ft
 			typedef T&																			reference;
 			typedef typename ft::iterator<ft::random_access_iterator_tag, T>::iterator_category	iterator_category;
 
-			random_access_iterator() : ptr(nullptr) {}
+			random_access_iterator() : ptr(0) {}
 
 			random_access_iterator(const random_access_iterator& copy) : ptr(copy.ptr) {}
 

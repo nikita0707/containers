@@ -1,47 +1,76 @@
 #include <iostream>
-#include <list>
-#include <vector>
-#include <stack>
-#include <map>
-#include <set>
-#include <string>
-#include "vector.hpp"
-#include "stack.hpp"
-#include "map.hpp"
-#include "set.hpp"
 #include <time.h>
-
-#include "tester/tester.hpp"
+#include <cstdlib>
 #include "test/test.hpp"
 
-class qwe
+void	test(char mask)
 {
-	public:
-		qwe() {std::cout << "born\n";}
-		~qwe() {std::cout << "die\n";}
-		int i = 42;
-};
-
-void test()
-{
-	vector_test();
-	stack_test();
-	map_test();
-	set_test();
-	
-	// test_vector();
-	// std::cout << "\n";
-	// test_stack();
-	// std::cout << "\n";
-	// test_map();
+	if (mask & 0b1000)
+	{
+		vector_test();
+		std::cout << "\n";
+	}
+	if (mask & 0b0100)
+	{
+		stack_test();
+		std::cout << "\n";
+	}
+	if (mask & 0b0010)
+	{
+		map_test();
+		std::cout << "\n";
+	}
+	if (mask & 0b0001)
+		set_test();
 }
 
-int main()
+void	toLower(char* str)
 {
+	for (int i = 0; str[i] != 0; ++i)
+		str[i] = std::tolower(str[i]);
+}
+
+int		wrondArgs()
+{
+	std::cerr << "Usage: ./test [number_of_repetitions] [container_names(optional)]\n";
+	std::cerr << "number_of_repetitions: number of test repetitions. Required for greater accuracy in measuring the speed of containers.\n";
+	std::cerr << "container_names: container names to test. Avaliable containers: Vector, Stack, Map, Set.\n";
+	return 1;
+}
+
+int		main(int argc, char** argv)
+{
+	char	mask = 0b1111;
+	int		count = 1;
+	if (argc < 2 || argc > 6)
+		return (wrondArgs());
+	count = std::atoi(argv[1]);
+	if (count < 1)
+		return (wrondArgs());
+	if (argc > 2)
+	{
+		mask = 0;
+		for (int i = 2; i < argc; ++i)
+		{
+			toLower(argv[i]);
+			std::string	s(argv[i]);
+			if (s == "vector")
+				mask = mask | 0b1000;
+			else if (s == "stack")
+				mask = mask | 0b0100;
+			else if (s == "map")
+				mask = mask | 0b0010;
+			else if (s == "set")
+				mask = mask | 0b0001;
+			else
+				return (wrondArgs());
+		}
+	}
 	clock_t	startc, endc;
 	startc = clock();
-	for (size_t i = 0; i < 1; i++)
-		test();
+	for (int i = 0; i < count; i++)
+		test(mask);
 	endc = clock();
-	printf("The above code block was executed in %.4f second(s)\n", (((double) endc - startc) / ((double) CLOCKS_PER_SEC)));
+	printf("The above code block was executed in %.5f second(s)\n", (((double) endc - startc) / ((double) CLOCKS_PER_SEC)));
+	return 0;
 }
