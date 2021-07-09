@@ -102,10 +102,44 @@ namespace ft
 			
 			pair<const_iterator,const_iterator>	equal_range(const key_type& k) const { return tree.equal_range(k); }
 
+			template <typename T1, typename C1, typename A1>
+			friend bool				operator==(const set<T1, C1, A1>& x, const set<T1, C1, A1>& y);
+
+			template <typename T1, typename C1, typename A1>
+			friend bool				operator<(const set<T1, C1, A1>& x, const set<T1, C1, A1>& y);
+
 		private:
 			key_compare				_comp;
 			tree_type				tree;
 	};
+
+	template <typename T, typename Compare, typename Alloc>
+	bool						operator==(const set<T, Compare, Alloc>& x, const set<T, Compare, Alloc>& y)
+	{ return x.tree == y.tree; }
+
+	template <typename T, typename Compare, typename Alloc>
+	bool						operator<(const set<T, Compare, Alloc>& x, const set<T, Compare, Alloc>& y)
+	{ return x.tree < y.tree; }
+
+	template <typename T, typename Compare, typename Alloc>
+	bool						operator!=(const set<T, Compare, Alloc>& x, const set<T, Compare, Alloc>& y)
+	{ return !(x == y); }
+
+	template <typename T, typename Compare, typename Alloc>
+	bool						operator>(const set<T, Compare, Alloc>& x, const set<T, Compare, Alloc>& y)
+	{ return y < x; }
+
+	template <typename T, typename Compare, typename Alloc>
+	bool						operator<=(const set<T, Compare, Alloc>& x, const set<T, Compare, Alloc>& y)
+	{ return !(y < x); }
+
+	template <typename T, typename Compare, typename Alloc>
+	bool						operator>=(const set<T, Compare, Alloc>& x, const set<T, Compare, Alloc>& y)
+	{ return !(x < y); }
+
+	template <class T, class Compare, class Alloc>
+	void swap(set<T, Compare, Alloc>& lhs, set<T, Compare, Alloc>& rhs )
+	{ lhs.swap(rhs); }
 }
 
 #endif

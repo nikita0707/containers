@@ -76,9 +76,9 @@ void	map_test()
 		ispair		parr[6];
 		for (size_t i = 0; i < 6; i++)
 			parr[i] = ft::make_pair(iarr[i], sarr[i]);
-		ft::map<int, std::string>	map1(parr, parr + 6);
-		ft::map<int, std::string>	map2(map1);
-		printAttr(map1);
+		ft::map<int, std::string>	map(parr, parr + 6);
+		ft::map<int, std::string>	map2(map);
+		printAttr(map);
 		std::cout << "\n";
 		printAttr(map2);
 	}
@@ -92,10 +92,10 @@ void	map_test()
 		ispair		parr[6];
 		for (size_t i = 0; i < 6; i++)
 			parr[i] = ft::make_pair(iarr[i], sarr[i]);
-		ft::map<int, std::string>	map1(parr, parr + 6);
+		ft::map<int, std::string>	map(parr, parr + 6);
 		ft::map<int, std::string>	map2;
-		map2 = map1;
-		printAttr(map1);
+		map2 = map;
+		printAttr(map);
 		std::cout << "\n";
 		printAttr(map2);
 	}
@@ -588,5 +588,239 @@ void	map_test()
 		ft::pair<iter, iter>	it = map.equal_range(7);
 		std::cout << "\n";
 		printContent(it.first, it.second);
+	}
+
+	std::cout << "\n  Non-member function overloads:\n";
+	
+	{
+		std::cout << "    Operator == (true):\n";
+		int			iarr[] = { 1, 2, 3, 4, 5, 6 };
+		std::string	sarr[] = { "One", "Two", "Three", "Four", "Five", "Six" };
+		ispair		parr[6];
+		for (size_t i = 0; i < 6; i++)
+			parr[i] = ft::make_pair(iarr[i], sarr[i]);
+		ft::map<int, std::string>	map(parr, parr + 6);
+		std::cout << "      m == m\t:  " << (map == map ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator == (false):\n";
+		int			iarr[] = { 1, 2, 3, 5, 6 };
+		std::string	sarr[] = { "One", "Two", "Three", "Five", "Six" };
+		ispair		parr[5];
+		for (size_t i = 0; i < 5; i++)
+			parr[i] = ft::make_pair(iarr[i], sarr[i]);
+		int			iarr2[] = { 4, 7, 8 };
+		std::string	sarr2[] = { "Four", "Seven", "Eight" };
+		ispair		parr2[3];
+		for (size_t i = 0; i < 3; i++)
+			parr2[i] = ft::make_pair(iarr2[i], sarr2[i]);
+		ft::map<int, std::string>	map(parr, parr + 5);
+		ft::map<int, std::string>	map2(parr2, parr2 + 3);
+		std::cout << "      m1 == m2\t:  " << (map == map2 ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator != (false):\n";
+		int			iarr[] = { 1, 2, 3, 4, 5, 6 };
+		std::string	sarr[] = { "One", "Two", "Three", "Four", "Five", "Six" };
+		ispair		parr[6];
+		for (size_t i = 0; i < 6; i++)
+			parr[i] = ft::make_pair(iarr[i], sarr[i]);
+		ft::map<int, std::string>	map(parr, parr + 6);
+		std::cout << "      m != m\t:  " << (map != map ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator != (true):\n";
+		int			iarr[] = { 1, 2, 3, 5, 6 };
+		std::string	sarr[] = { "One", "Two", "Three", "Five", "Six" };
+		ispair		parr[5];
+		for (size_t i = 0; i < 5; i++)
+			parr[i] = ft::make_pair(iarr[i], sarr[i]);
+		int			iarr2[] = { 4, 7, 8 };
+		std::string	sarr2[] = { "Four", "Seven", "Eight" };
+		ispair		parr2[3];
+		for (size_t i = 0; i < 3; i++)
+			parr2[i] = ft::make_pair(iarr2[i], sarr2[i]);
+		ft::map<int, std::string>	map(parr, parr + 5);
+		ft::map<int, std::string>	map2(parr2, parr2 + 3);
+		std::cout << "      m1 != m2\t:  " << (map != map2 ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator < (false):\n";
+		int			iarr[] = { 1, 2, 3, 4, 5, 6 };
+		std::string	sarr[] = { "One", "Two", "Three", "Four", "Five", "Six" };
+		ispair		parr[6];
+		for (size_t i = 0; i < 6; i++)
+			parr[i] = ft::make_pair(iarr[i], sarr[i]);
+		ft::map<int, std::string>	map(parr, parr + 6);
+		std::cout << "      m < m\t:  " << (map < map ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator < (true):\n";
+		int			iarr[] = { 1, 2, 3, 5, 6 };
+		std::string	sarr[] = { "One", "Two", "Three", "Five", "Six" };
+		ispair		parr[5];
+		for (size_t i = 0; i < 5; i++)
+			parr[i] = ft::make_pair(iarr[i], sarr[i]);
+		int			iarr2[] = { 4, 7, 8 };
+		std::string	sarr2[] = { "Four", "Seven", "Eight" };
+		ispair		parr2[3];
+		for (size_t i = 0; i < 3; i++)
+			parr2[i] = ft::make_pair(iarr2[i], sarr2[i]);
+		ft::map<int, std::string>	map(parr, parr + 5);
+		ft::map<int, std::string>	map2(parr2, parr2 + 3);
+		std::cout << "      m1 < m2\t:  " << (map < map2 ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator <= (false):\n";
+		int			iarr[] = { 1, 2, 3, 5, 6 };
+		std::string	sarr[] = { "One", "Two", "Three", "Five", "Six" };
+		ispair		parr[5];
+		for (size_t i = 0; i < 5; i++)
+			parr[i] = ft::make_pair(iarr[i], sarr[i]);
+		int			iarr2[] = { 4, 7, 8 };
+		std::string	sarr2[] = { "Four", "Seven", "Eight" };
+		ispair		parr2[3];
+		for (size_t i = 0; i < 3; i++)
+			parr2[i] = ft::make_pair(iarr2[i], sarr2[i]);
+		ft::map<int, std::string>	map(parr, parr + 5);
+		ft::map<int, std::string>	map2(parr2, parr2 + 3);
+		std::cout << "      m2 <= m1\t:  " << (map2 <= map ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator <= (true):\n";
+		int			iarr[] = { 1, 2, 3, 5, 6 };
+		std::string	sarr[] = { "One", "Two", "Three", "Five", "Six" };
+		ispair		parr[5];
+		for (size_t i = 0; i < 5; i++)
+			parr[i] = ft::make_pair(iarr[i], sarr[i]);
+		int			iarr2[] = { 4, 7, 8 };
+		std::string	sarr2[] = { "Four", "Seven", "Eight" };
+		ispair		parr2[3];
+		for (size_t i = 0; i < 3; i++)
+			parr2[i] = ft::make_pair(iarr2[i], sarr2[i]);
+		ft::map<int, std::string>	map(parr, parr + 5);
+		ft::map<int, std::string>	map2(parr2, parr2 + 3);
+		std::cout << "      m1 <= m2\t:  " << (map <= map2 ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator > (true):\n";
+		int			iarr[] = { 1, 2, 3, 5, 6 };
+		std::string	sarr[] = { "One", "Two", "Three", "Five", "Six" };
+		ispair		parr[5];
+		for (size_t i = 0; i < 5; i++)
+			parr[i] = ft::make_pair(iarr[i], sarr[i]);
+		int			iarr2[] = { 4, 7, 8 };
+		std::string	sarr2[] = { "Four", "Seven", "Eight" };
+		ispair		parr2[3];
+		for (size_t i = 0; i < 3; i++)
+			parr2[i] = ft::make_pair(iarr2[i], sarr2[i]);
+		ft::map<int, std::string>	map(parr, parr + 5);
+		ft::map<int, std::string>	map2(parr2, parr2 + 3);
+		std::cout << "      m2 > m1\t:  " << (map2 > map ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator > (false):\n";
+		int			iarr[] = { 1, 2, 3, 5, 6 };
+		std::string	sarr[] = { "One", "Two", "Three", "Five", "Six" };
+		ispair		parr[5];
+		for (size_t i = 0; i < 5; i++)
+			parr[i] = ft::make_pair(iarr[i], sarr[i]);
+		int			iarr2[] = { 4, 7, 8 };
+		std::string	sarr2[] = { "Four", "Seven", "Eight" };
+		ispair		parr2[3];
+		for (size_t i = 0; i < 3; i++)
+			parr2[i] = ft::make_pair(iarr2[i], sarr2[i]);
+		ft::map<int, std::string>	map(parr, parr + 5);
+		ft::map<int, std::string>	map2(parr2, parr2 + 3);
+		std::cout << "      m1 > m2\t:  " << (map > map2 ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator >= (true):\n";
+		int			iarr[] = { 1, 2, 3, 5, 6 };
+		std::string	sarr[] = { "One", "Two", "Three", "Five", "Six" };
+		ispair		parr[5];
+		for (size_t i = 0; i < 5; i++)
+			parr[i] = ft::make_pair(iarr[i], sarr[i]);
+		int			iarr2[] = { 4, 7, 8 };
+		std::string	sarr2[] = { "Four", "Seven", "Eight" };
+		ispair		parr2[3];
+		for (size_t i = 0; i < 3; i++)
+			parr2[i] = ft::make_pair(iarr2[i], sarr2[i]);
+		ft::map<int, std::string>	map(parr, parr + 5);
+		ft::map<int, std::string>	map2(parr2, parr2 + 3);
+		std::cout << "      m2 >= m1\t:  " << (map2 >= map ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator >= (false):\n";
+		int			iarr[] = { 1, 2, 3, 5, 6 };
+		std::string	sarr[] = { "One", "Two", "Three", "Five", "Six" };
+		ispair		parr[5];
+		for (size_t i = 0; i < 5; i++)
+			parr[i] = ft::make_pair(iarr[i], sarr[i]);
+		int			iarr2[] = { 4, 7, 8 };
+		std::string	sarr2[] = { "Four", "Seven", "Eight" };
+		ispair		parr2[3];
+		for (size_t i = 0; i < 3; i++)
+			parr2[i] = ft::make_pair(iarr2[i], sarr2[i]);
+		ft::map<int, std::string>	map(parr, parr + 5);
+		ft::map<int, std::string>	map2(parr2, parr2 + 3);
+		std::cout << "      m1 >= m2\t:  " << (map >= map2 ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Swap:\n";
+		int			iarr[] = { 1, 2, 3, 5, 6 };
+		std::string	sarr[] = { "One", "Two", "Three", "Five", "Six" };
+		ispair		parr[5];
+		for (size_t i = 0; i < 5; i++)
+			parr[i] = ft::make_pair(iarr[i], sarr[i]);
+		int			iarr2[] = { 4, 7, 8 };
+		std::string	sarr2[] = { "Four", "Seven", "Eight" };
+		ispair		parr2[3];
+		for (size_t i = 0; i < 3; i++)
+			parr2[i] = ft::make_pair(iarr2[i], sarr2[i]);
+		ft::map<int, std::string>	map(parr, parr + 5);
+		ft::map<int, std::string>	map2(parr2, parr2 + 3);
+		printContent(map.begin(), map.end());
+		printContent(map2.begin(), map2.end());
+		std::cout << "\n";
+		ft::swap(map, map2);
+		printContent(map.begin(), map.end());
+		printContent(map2.begin(), map2.end());
 	}
 }

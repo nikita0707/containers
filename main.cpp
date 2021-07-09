@@ -1,7 +1,6 @@
 #include <iostream>
 #include <time.h>
 #include <cstdlib>
-#include <cstdio>
 #include "test/test.hpp"
 
 void	test(char mask)
@@ -9,20 +8,25 @@ void	test(char mask)
 	if (mask & 0b1000)
 	{
 		vector_test();
-		std::cout << "\n";
 	}
 	if (mask & 0b0100)
 	{
+		if (mask > 0b0100)
+			std::cout << "\n";
 		stack_test();
-		std::cout << "\n";
 	}
 	if (mask & 0b0010)
 	{
+		if (mask > 0b0010)
+			std::cout << "\n";
 		map_test();
-		std::cout << "\n";
 	}
 	if (mask & 0b0001)
+	{
+		if (mask > 0b0001)
+			std::cout << "\n";
 		set_test();
+	}
 }
 
 void	toLower(char* str)
@@ -44,7 +48,7 @@ int		wrondArgs()
 	std::cerr << "container_names: container names to test. Avaliable containers: Vector, Stack, Map, Set.\n";
 	return 1;
 }
-
+#include <map>
 int		main(int argc, char** argv)
 {
 	char	mask = 0b1111;
@@ -78,6 +82,7 @@ int		main(int argc, char** argv)
 	for (int i = 0; i < count; i++)
 		test(mask);
 	endc = clock();
-	printf("\nAverage time to complete the test: %.5f second(s)\n", (((double) endc - startc) / ((double) CLOCKS_PER_SEC)) / count);
+	double	avg = (((double) endc - startc) / ((double) CLOCKS_PER_SEC)) / count;
+	std::cout << "\nAverage time to complete the test: " << avg << " second(s)\n";
 	return 0;
 }

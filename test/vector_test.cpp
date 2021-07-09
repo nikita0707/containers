@@ -609,9 +609,11 @@ void	vector_test()
 	
 	{
 		std::cout << "    Operator > (true):\n";
-		int				arr[] = { 3, 14, 15, 92, 65, 359 };
-		ft::vector<int> vec(arr, arr + 6);
-		std::cout << "      v > v\t:  " << (vec > vec ? "true\n" : "false\n");
+		int				arr1[] = { 3, 14, 15, 92, 65, 359 };
+		int				arr2[] = { 359, 65, 92, 15, 14, 3 };
+		ft::vector<int> vec1(arr1, arr1 + 6);
+		ft::vector<int> vec2(arr2, arr2 + 6);
+		std::cout << "      v2 > v1\t:  " << (vec2 > vec1 ? "true\n" : "false\n");
 	}
 
 	std::cout << "\n";

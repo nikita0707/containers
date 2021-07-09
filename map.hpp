@@ -121,10 +121,44 @@ namespace ft
 			
 			pair<const_iterator,const_iterator>	equal_range(const key_type& k) const { return tree.equal_range(k); }
 
+			template <typename K1, typename T1, typename C1, typename A1>
+			friend bool				operator==(const map<K1, T1, C1, A1>& lhs, const map<K1, T1, C1, A1>& rhs);
+
+			template <typename K1, typename T1, typename C1, typename A1>
+			friend bool				operator<(const map<K1, T1, C1, A1>& lhs, const map<K1, T1, C1, A1>& rhs);
+
 		private:
 			key_compare				_comp;
 			tree_type				tree;
 	};
+
+	template <typename Key, typename T, typename Compare, typename Alloc>
+	bool						operator==(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs)
+	{ return lhs.tree == rhs.tree; }
+
+	template <typename Key, typename T, typename Compare, typename Alloc>
+	bool						operator<(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs)
+	{ return lhs.tree < rhs.tree; }
+
+	template <typename Key, typename T, typename Compare, typename Alloc>
+	bool						operator!=(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs)
+	{ return !(lhs == rhs); }
+
+	template <typename Key, typename T, typename Compare, typename Alloc>
+	bool						operator>(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs)
+	{ return rhs < lhs; }
+
+	template <typename Key, typename T, typename Compare, typename Alloc>
+	bool						operator<=(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs)
+	{ return !(rhs < lhs); }
+
+	template <typename Key, typename T, typename Compare, typename Alloc>
+	bool						operator>=(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs)
+	{ return !(lhs < rhs); }
+
+	template <class Key, class T, class Compare, class Alloc>
+	void swap(map<Key, T, Compare, Alloc>& lhs, map<Key, T, Compare, Alloc>& rhs )
+	{ lhs.swap(rhs); }
 }
 
 #endif

@@ -96,37 +96,37 @@ namespace ft
 	ft::pair<T1,T2>		make_pair(T1 t, T2 u) { return ft::pair<T1, T2>(t, u); }
 
 	template <class T1, class T2>
-	bool operator==(const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs)
+	bool operator==(const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs)
 	{
 		return (lhs.first == rhs.first && lhs.second == lhs.second);
 	}
 
 	template<class T1, class T2>
-	bool operator!=(const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs)
+	bool operator!=(const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs)
 	{
 		return (!(lhs == rhs));
 	}
 
 	template<class T1, class T2>
-	bool operator<(const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs)
+	bool operator<(const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs)
 	{
 		return ((lhs.first < rhs.first) || ((lhs.first == rhs.first) && lhs.second < rhs.second));
 	}
 
 	template<class T1, class T2>
-	bool operator<=(const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs)
+	bool operator<=(const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs)
 	{
 		return (!(rhs < lhs));
 	}
 
 	template<class T1, class T2>
-	bool operator>(const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs)
+	bool operator>(const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs)
 	{
 		return (rhs < lhs);
 	}
 
 	template<class T1, class T2>
-	bool operator>=(const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs)
+	bool operator>=(const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs)
 	{
 		return (!(lhs < rhs));
 	}
@@ -307,6 +307,19 @@ namespace ft
 			pair<iterator,iterator>	equal_range(const key_type& k) { return _equal_range(k); }
 			
 			pair<const_iterator,const_iterator>	equal_range(const key_type& k) const { return _equal_range(k); }
+
+			friend bool				operator==(const RBTree& x, const RBTree& y)
+			{ return x.size() == y.size() && ft::equal(x.begin(), x.end(), y.begin()); }
+			friend bool				operator<(const RBTree& x, const RBTree& y)
+			{ return ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end()); }
+			friend bool				operator!=(const RBTree& x, const RBTree& y)
+			{ return !(x == y); }
+			friend bool				operator>(const RBTree& x, const RBTree& y)
+			{ return y < x; }
+			friend bool				operator<=(const RBTree& x, const RBTree& y)
+			{ return !(y < x); }
+			friend bool				operator>=(const RBTree& x, const RBTree& y)
+			{ return !(x < y); }
 
 		protected:
 			typedef RBNode<value_type>*										link_type;

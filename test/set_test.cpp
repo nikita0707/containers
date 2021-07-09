@@ -431,4 +431,146 @@ void	set_test()
 		std::cout << "\n";
 		printContent(it.first, it.second);
 	}
+
+	std::cout << "\n  Non-member function overloads:\n";
+	
+	{
+		std::cout << "    Operator == (true):\n";
+		int			arr[] = { 1, 2, 3, 4, 5, 6 };
+		ft::set<int>	set(arr, arr + 6);
+		std::cout << "      s == s\t:  " << (set == set ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator == (false):\n";
+		int			arr[] = { 1, 2, 3, 5, 6 };
+		int			arr2[] = { 4, 7, 8 };
+		ft::set<int>	set(arr, arr + 5);
+		ft::set<int>	set2(arr2, arr2 + 3);
+		std::cout << "      s1 == s2\t:  " << (set == set2 ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator != (false):\n";
+		int			arr[] = { 1, 2, 3, 4, 5, 6 };
+		ft::set<int>	set(arr, arr + 6);
+		std::cout << "      s != s\t:  " << (set != set ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator != (true):\n";
+		int			arr[] = { 1, 2, 3, 5, 6 };
+		int			arr2[] = { 4, 7, 8 };
+		ft::set<int>	set(arr, arr + 5);
+		ft::set<int>	set2(arr2, arr2 + 3);
+		std::cout << "      s1 != s2\t:  " << (set != set2 ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator < (false):\n";
+		int			arr[] = { 1, 2, 3, 4, 5, 6 };
+		ft::set<int>	set(arr, arr + 6);
+		std::cout << "      s < s\t:  " << (set < set ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator < (true):\n";
+		int			arr[] = { 1, 2, 3, 5, 6 };
+		int			arr2[] = { 4, 7, 8 };
+		ft::set<int>	set(arr, arr + 5);
+		ft::set<int>	set2(arr2, arr2 + 3);
+		std::cout << "      s1 < s2\t:  " << (set < set2 ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator <= (false):\n";
+		int			arr[] = { 1, 2, 3, 5, 6 };
+		int			arr2[] = { 4, 7, 8 };
+		ft::set<int>	set(arr, arr + 5);
+		ft::set<int>	set2(arr2, arr2 + 3);
+		std::cout << "      s2 <= s1\t:  " << (set2 <= set ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator <= (true):\n";
+		int			arr[] = { 1, 2, 3, 5, 6 };
+		int			arr2[] = { 4, 7, 8 };
+		ft::set<int>	set(arr, arr + 5);
+		ft::set<int>	set2(arr2, arr2 + 3);
+		std::cout << "      s1 <= s2\t:  " << (set <= set2 ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator > (true):\n";
+		int			arr[] = { 1, 2, 3, 5, 6 };
+		int			arr2[] = { 4, 7, 8 };
+		ft::set<int>	set(arr, arr + 5);
+		ft::set<int>	set2(arr2, arr2 + 3);
+		std::cout << "      s2 > s1\t:  " << (set2 > set ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator > (false):\n";
+		int			arr[] = { 1, 2, 3, 5, 6 };
+		int			arr2[] = { 4, 7, 8 };
+		ft::set<int>	set(arr, arr + 5);
+		ft::set<int>	set2(arr2, arr2 + 3);
+		std::cout << "      s1 > s2\t:  " << (set > set2 ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator >= (true):\n";
+		int			arr[] = { 1, 2, 3, 5, 6 };
+		int			arr2[] = { 4, 7, 8 };
+		ft::set<int>	set(arr, arr + 5);
+		ft::set<int>	set2(arr2, arr2 + 3);
+		std::cout << "      s2 >= s1\t:  " << (set2 >= set ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Operator >= (false):\n";
+		int			arr[] = { 1, 2, 3, 5, 6 };
+		int			arr2[] = { 4, 7, 8 };
+		ft::set<int>	set(arr, arr + 5);
+		ft::set<int>	set2(arr2, arr2 + 3);
+		std::cout << "      s1 >= s2\t:  " << (set >= set2 ? "true\n" : "false\n");
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Swap:\n";
+		int			arr[] = { 1, 2, 3, 5, 6 };
+		int			arr2[] = { 4, 7, 8 };
+		ft::set<int>	set(arr, arr + 5);
+		ft::set<int>	set2(arr2, arr2 + 3);
+		printContent(set.begin(), set.end());
+		printContent(set2.begin(), set2.end());
+		std::cout << "\n";
+		ft::swap(set, set2);
+		printContent(set.begin(), set.end());
+		printContent(set2.begin(), set2.end());
+	}
 }

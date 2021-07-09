@@ -10,15 +10,15 @@ SOURCE=	main.cpp \
 
 FTOSOURCE= $(SOURCE:.cpp=.o)
 
-STDOSOURCE= $(addsuffix s.o, $(basename $(SOURCE)))
+STDOSOURCE= $(addsuffix _std.o, $(basename $(SOURCE)))
 
 all: $(FTNAME) $(STDNAME)
 
 %.o: %.cpp
 	clang++ -Wall -Werror -Wextra --std=c++98 -c $< -o $@
 
-%s.o: %.cpp
-	clang++ -Wall -Werror -Wextra --std=c++98 -c $(patsubst *s.cpp, *.cpp, $<) -o $@ -D STD
+%_std.o: %.cpp
+	clang++ -Wall -Werror -Wextra --std=c++98 -c $< -o $@ -D STD
 
 $(FTNAME): $(FTOSOURCE)
 	clang++ $(FTOSOURCE) -o $(FTNAME)
@@ -34,4 +34,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: clean fclean re all bonus
+.PHONY: clean fclean re all
