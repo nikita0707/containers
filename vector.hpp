@@ -146,6 +146,9 @@ namespace ft
 			reference				back() { return *(finish - 1); }
 			const_reference			back() const { return *(finish - 1); }
 
+			T*						data() { return start; }
+			const T*				data() const { return start; }
+
 			//						Modifiers
 
 			template <class InputIterator>

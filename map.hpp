@@ -18,11 +18,10 @@ namespace ft
 			typedef Compare														key_compare;
 			class value_compare : public ft::binary_function<value_type, value_type, bool>
 			{
-				friend class map<Key, T, Compare, Alloc>;
 				protected:
 					Compare	comp;
-					value_compare(Compare c) : comp(c) {}
 				public:
+					value_compare(Compare c) : comp(c) {}
 					bool	operator()(const value_type& x, const value_type& y) const
 					{ return (comp(x.first, y.first)); }
 			};
@@ -79,6 +78,21 @@ namespace ft
 				
 				if (i == tree.end() || _comp(k, (*i).first))
 					i = tree.insert_unique(i, value_type(k, mapped_type()));
+				return (*i).second;
+			}
+
+			mapped_type&			at(const key_type& key)
+			{
+				iterator	i = lower_bound(key);
+				if (i == end() || _comp(key, (*i).first))
+					throw std::out_of_range("map::at");
+				return (*i).second;
+			}
+			const mapped_type&		at(const key_type& key) const
+			{
+				const_iterator	i = lower_bound(key);
+				if (i == end() || _comp(key, (*i).first))
+					throw std::out_of_range("map::at");
 				return (*i).second;
 			}
 

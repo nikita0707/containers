@@ -16,7 +16,7 @@ void	printAttr(ft::vector<T>& vec)
 	std::cout << "      Content\t:  [";
 	typename ft::vector<T>::const_iterator	beg = vec.begin();
 	typename ft::vector<T>::const_iterator	it = beg;
-	typename ft::vector<T>::const_iterator	end = vec.end();
+	typename ft::vector<T>::iterator	end = vec.end();
 	for (; it != end; ++it)
 	{
 		if (it != beg)
@@ -32,7 +32,7 @@ void	printContent(ft::vector<T>& vec)
 	std::cout << "      Content\t:  [";
 	typename ft::vector<T>::const_iterator	beg = vec.begin();
 	typename ft::vector<T>::const_iterator	it = beg;
-	typename ft::vector<T>::const_iterator	end = vec.end();
+	typename ft::vector<T>::iterator	end = vec.end();
 	for (; it != end; ++it)
 	{
 		if (it != beg)
@@ -376,6 +376,26 @@ void	vector_test()
 		int				arr[] = { 3, 14, 15, 92, 65, 359 };
 		const ft::vector<int> vec(arr, arr + 6);
 		std::cout << "      Content\t:  [" << vec.back() << "]\n";
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Data:\n";
+		int				arr[] = { 3, 14, 15, 92, 65, 359 };
+		ft::vector<int> vec(arr, arr + 6);
+		int*			data = vec.data();
+		std::cout << "      Content\t:  [" << *data << "]\n";
+	}
+
+	std::cout << "\n";
+	
+	{
+		std::cout << "    Const Data:\n";
+		int				arr[] = { 3, 14, 15, 92, 65, 359 };
+		const ft::vector<int> vec(arr, arr + 6);
+		const int*		data = vec.data();
+		std::cout << "      Content\t:  [" << *data << "]\n";
 	}
 
 	std::cout << "\n  Modifiers:\n";

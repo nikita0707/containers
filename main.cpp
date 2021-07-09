@@ -11,13 +11,13 @@ void	test(char mask)
 	}
 	if (mask & 0b0100)
 	{
-		if (mask > 0b0100)
+		if (mask > 0b0111)
 			std::cout << "\n";
 		stack_test();
 	}
 	if (mask & 0b0010)
 	{
-		if (mask > 0b0010)
+		if (mask > 0b0011)
 			std::cout << "\n";
 		map_test();
 	}
@@ -48,7 +48,7 @@ int		wrondArgs()
 	std::cerr << "container_names: container names to test. Avaliable containers: Vector, Stack, Map, Set.\n";
 	return 1;
 }
-#include <map>
+
 int		main(int argc, char** argv)
 {
 	char	mask = 0b1111;

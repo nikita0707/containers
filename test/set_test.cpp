@@ -16,7 +16,7 @@ void	printAttr(ft::set<Key>& set)
 	std::cout << "      Content\t:  [";
 	typename ft::set<Key>::const_iterator	beg = set.begin();
 	typename ft::set<Key>::const_iterator	it = beg;
-	typename ft::set<Key>::const_iterator	end = set.end();
+	typename ft::set<Key>::iterator	end = set.end();
 	for (; it != end; ++it)
 	{
 		if (it != beg)
