@@ -224,7 +224,6 @@ namespace ft
 				typedef pair<iterator, bool>	_res;
 				ft::pair<node, node>	res = get_insert_unique_pos(get_key(val));
 
-				_res	ret;
 				if (res.second)
 					return _res(insert(res.first, res.second, val), true);
 				return _res(iterator(res.first), false);
@@ -234,7 +233,6 @@ namespace ft
 			{
 				pair<node, node>	res = insert_hint_unique_pos(position, get_key(val));
 
-				iterator	ret;
 				if (res.second)
 					return insert(res.first, res.second, val);
 				return iterator(res.first);
